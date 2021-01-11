@@ -4,10 +4,14 @@ import com.bootx.dao.BitCoinAccountMoneyDao;
 import com.bootx.entity.BitCoinAccount;
 import com.bootx.entity.BitCoinAccountMoney;
 import com.bootx.entity.Member;
+import com.bootx.eth.service.EthAdminService;
 import com.bootx.service.BitCoinAccountMoneyService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 /**
@@ -21,6 +25,8 @@ public class BitCoinAccountMoneyServiceImpl extends BaseServiceImpl<BitCoinAccou
 
     @Autowired
     private BitCoinAccountMoneyDao bitCoinAccountMoneyDao;
+    @Resource
+    private EthAdminService ethAdminService;
 
     @Override
     public void init(Member member, BitCoinAccount bitCoinAccount) {
@@ -37,7 +43,13 @@ public class BitCoinAccountMoneyServiceImpl extends BaseServiceImpl<BitCoinAccou
     }
 
     @Override
-    public BitCoinAccountMoney findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId) {
-        return bitCoinAccountMoneyDao.findByBitCoinAccountIdAndUserId( bitCoinAccountId, userId);
+    @Transactional(readOnly = true)
+    public BitCoinAccountMoney findByBitCoinAccountIdAndUserId(BitCoinAccount bitCoinAccount, Long userId) {
+        BitCoinAccountMoney bitCoinAccountMoney = bitCoinAccountMoneyDao.findByBitCoinAccountIdAndUserId(bitCoinAccount, userId);
+        if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccount.getName())){
+            bitCoinAccountMoney.setPrice(BigDecimal.valueOf(Double.parseDouble(ethAdminService.ethGetBalance(bitCoinAccount.getAddressId()))));
+            bitCoinAccountMoney.setMoney(bitCoinAccountMoney.getPrice().divide(new BigDecimal(2)));
+        }
+        return bitCoinAccountMoney;
     }
 }

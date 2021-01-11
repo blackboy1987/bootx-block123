@@ -1,5 +1,6 @@
 package com.bootx.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
@@ -15,24 +16,34 @@ public class InvestItem extends BaseEntity<Long>{
 
     private Long productId;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal electric;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal manage;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal profit;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal btcPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal hptPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal invest;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal investAmount;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal investBtc;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal investHpt;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal investEth;
 
     private Integer state;

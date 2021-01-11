@@ -2,6 +2,7 @@ package com.bootx.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,13 +21,16 @@ public class MineMachineOrder extends BaseEntity<Long>{
     private Integer productType;
     private Long productId;
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal price;
     private Integer invest;
     @JsonView({PageView.class})
     private Integer quantity;
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal amount;
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal discount;
     @JsonView({PageView.class})
     private String memo;
@@ -56,9 +60,12 @@ public class MineMachineOrder extends BaseEntity<Long>{
     @JsonView({PageView.class})
     private Integer day;
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal addElectric;
+    @Column(precision = 27, scale = 12)
     private BigDecimal electricMoney;
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal rmbPrice;
     @JsonView({PageView.class})
     private Integer coinType;

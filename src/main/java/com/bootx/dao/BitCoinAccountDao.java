@@ -18,4 +18,6 @@ public interface BitCoinAccountDao extends BaseDao<BitCoinAccount, Long> {
     BitCoinAccount findByUserIdAndName(Long userId, String name);
 
     BitCoinAccount findByUserIdAndAssetType(Long userId, Integer assetType);
+
+    BitCoinAccount findByAddressIdAndAssetType(String addressId, Integer asset);
 }

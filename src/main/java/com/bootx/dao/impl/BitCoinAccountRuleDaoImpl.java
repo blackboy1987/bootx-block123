@@ -20,17 +20,16 @@ import javax.persistence.criteria.Root;
 public class BitCoinAccountRuleDaoImpl extends BaseDaoImpl<BitCoinAccountRule, Long> implements BitCoinAccountRuleDao {
 
     @Override
-    public BitCoinAccountRule findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId) {
+    public BitCoinAccountRule findByAssetType(Integer assetType) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<BitCoinAccountRule> criteriaQuery = criteriaBuilder.createQuery(BitCoinAccountRule.class);
         Root<BitCoinAccountRule> root = criteriaQuery.from(BitCoinAccountRule.class);
         criteriaQuery.select(root);
-        if (bitCoinAccountId == null || userId == null) {
+        if (assetType == null) {
             return new BitCoinAccountRule();
         }
         Predicate restrictions = criteriaBuilder.conjunction();
-        restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("bitCoinAccountId"), bitCoinAccountId));
-        restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("userId"), userId));
+        restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("assetType"), assetType));
         criteriaQuery.where(restrictions);
         try {
             return super.findList(criteriaQuery, null, null, null, null).get(0);

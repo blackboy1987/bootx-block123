@@ -25,8 +25,6 @@ public class BitCoinAccountRuleServiceImpl extends BaseServiceImpl<BitCoinAccoun
     @Override
     public void init(Member member, BitCoinAccount bitCoinAccount) {
         BitCoinAccountRule bitCoinAccountRule = new BitCoinAccountRule();
-        bitCoinAccountRule.setUserId(member.getId());
-        bitCoinAccountRule.setBitCoinAccountId(bitCoinAccount.getId());
         bitCoinAccountRule.setAssetType(bitCoinAccount.getAssetType());
         bitCoinAccountRule.setCanRecharge(false);
         bitCoinAccountRule.setCanWithdraw(false);
@@ -46,7 +44,7 @@ public class BitCoinAccountRuleServiceImpl extends BaseServiceImpl<BitCoinAccoun
     }
 
     @Override
-    public BitCoinAccountRule findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId) {
-        return bitCoinAccountRuleDao.findByBitCoinAccountIdAndUserId( bitCoinAccountId, userId);
+    public BitCoinAccountRule findByAssetType(Integer assetType) {
+        return bitCoinAccountRuleDao.findByAssetType(assetType);
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -76,15 +75,13 @@ public class AuthController {
         member.setMemberRank(memberRankService.findDefault());
         userService.register(member);
         userService.login(new UserAuthenticationToken(Member.class, member.getUsername(), enrollVo.getPassword(), false, request.getRemoteAddr()));
-        // 初始化各个币的账户
-        bitCoinAccountService.initAccount(member);
-
+        /**
+         * 创建JLB账户
+         */
         ExecutorService singleThreadPool = Executors.newFixedThreadPool(1);
         singleThreadPool.execute(()-> {
-            NewAccountIdentifier newAccountIdentifier = ethAdminService.newAccountIdentifier(member.getMobile());
-            if(newAccountIdentifier!=null){
-                member.setAccountId(newAccountIdentifier.getAccountId());
-            }
+            // 初始化各个币的账户
+            bitCoinAccountService.initAccount(member);
         });
         singleThreadPool.shutdown();
 

@@ -1,5 +1,6 @@
 package com.bootx.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,22 +17,31 @@ public class Invest extends BaseEntity<Long>{
 
     private String productName;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal invest;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal frozenInvest;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal frozenInvestTemp;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal allBtc;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal allHpt;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal allEth;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal lastEth;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal lastBtc;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal lastHpt;
 
     private Date lastTime;
@@ -40,6 +50,7 @@ public class Invest extends BaseEntity<Long>{
 
     private Date investTime;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal returnMoney;
 
     private Integer returnDays;
@@ -52,34 +63,47 @@ public class Invest extends BaseEntity<Long>{
 
     private Long validity;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal allBtcPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal allHptPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal lastBtcPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal lastHptPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal allEthPrice;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal lastEthPrice;
 
     private Integer type;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal profit;
 
     private Long profitYear;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal electric;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal electricDiscount;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal manage;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal manageDiscount;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal btcDiscount;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal hbtDiscount;
 
     private Date expireDate;

@@ -19,5 +19,5 @@ public interface AccountLogService extends BaseService<AccountLog, Long> {
 
     Page<AccountLog> findPage(Pageable pageable, Long userId, Integer dataType);
 
-    AccountLog create(Member member, BitCoinAccount bitCoinAccount, BigDecimal money, Integer dataType);
+    AccountLog create(Member member, BitCoinAccount bitCoinAccount, BigDecimal money, Integer dataType,String title);
 }

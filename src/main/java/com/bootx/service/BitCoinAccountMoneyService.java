@@ -15,5 +15,5 @@ public interface BitCoinAccountMoneyService extends BaseService<BitCoinAccountMo
 
     void init(Member member, BitCoinAccount bitCoinAccount);
 
-    BitCoinAccountMoney findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId);
+    BitCoinAccountMoney findByBitCoinAccountIdAndUserId(BitCoinAccount bitCoinAccount, Long userId);
 }

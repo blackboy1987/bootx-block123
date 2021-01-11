@@ -57,7 +57,7 @@ public class PayController extends BaseController {
             if(bitCoinAccount!=null&&!bitCoinAccount.isNew()){
                 //bitCoinAccount.setMoney(bitCoinAccount.getMoney().add(money));
                 //bitCoinAccountService.update(bitCoinAccount);
-                accountLogService.create(member,bitCoinAccount,money,1);
+                accountLogService.create(member,bitCoinAccount,money,1,bitCoinAccount.getName()+"充值");
             }
 
             return Result.success("充值成功,等待系统审核");

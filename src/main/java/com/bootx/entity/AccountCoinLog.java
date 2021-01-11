@@ -1,6 +1,7 @@
 package com.bootx.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,8 +15,11 @@ public class AccountCoinLog extends BaseEntity<Long>{
 
     private Long userId;
     private Integer assetType;
+    @Column(precision = 27, scale = 12)
     private BigDecimal oldValue;
+    @Column(precision = 27, scale = 12)
     private BigDecimal changeValue;
+    @Column(precision = 27, scale = 12)
     private BigDecimal newValue;
     private Integer changeType;
     private Date changeTime;

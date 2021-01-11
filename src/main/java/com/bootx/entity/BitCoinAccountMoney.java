@@ -1,5 +1,6 @@
 package com.bootx.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -7,7 +8,7 @@ import java.math.BigDecimal;
 
 
 @Entity
-@Table(name = "BitCoinAccountWallet", uniqueConstraints = { @UniqueConstraint(columnNames = { "userId", "bitCoinAccountId","assetType" })})
+@Table(name = "BitCoinAccountMoney", uniqueConstraints = { @UniqueConstraint(columnNames = { "userId", "bitCoinAccountId","assetType" })})
 public class BitCoinAccountMoney extends BaseEntity<Long> {
 
     private Long userId;
@@ -16,15 +17,32 @@ public class BitCoinAccountMoney extends BaseEntity<Long> {
 
     private Integer assetType;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal money;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal frozenMoney;
 
     private Integer state;
 
     private String name;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal price;
+
+    public BitCoinAccountMoney() {
+    }
+
+    public BitCoinAccountMoney(Long userId, BitCoinAccount bitCoinAccount) {
+        this.userId = userId;
+        this.bitCoinAccountId = bitCoinAccount.getId();
+        this.assetType = bitCoinAccount.getAssetType();
+        this.money = BigDecimal.ZERO;
+        this.frozenMoney = BigDecimal.ZERO;
+        this.state = 0;
+        this.name = bitCoinAccount.getName();
+        this.price = bitCoinAccount.getPrice();
+    }
 
     public Long getUserId() {
         return userId;

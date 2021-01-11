@@ -10,6 +10,7 @@ import com.bootx.security.CurrentUser;
 import com.bootx.service.InvestService;
 import com.bootx.service.MemberService;
 import com.bootx.util.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,4 +93,24 @@ public class InvestController extends BaseController {
         data.put("invest",Math.random()*100);
         return Result.success(data);
     }
+
+    @PostMapping("/moneyRule")
+    public Result moneyRule(@CurrentUser Member member, HttpServletRequest request, Integer assetType) {
+        Map<String, Object> data = new HashMap<>();
+        if (member == null) {
+            member = memberService.getCurrent(request);
+        }
+        if (member == null) {
+            data.put("type",0);
+            return Result.ok(0,null);
+        }
+        if(member.getIsAuth()==null||!member.getIsAuth()){
+            return Result.ok(10,null);
+        }
+        if(StringUtils.isBlank(member.getEncodedPassword1())){
+            return Result.ok(20,null);
+        }
+        return Result.success(null);
+    }
+
 }

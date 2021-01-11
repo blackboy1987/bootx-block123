@@ -15,5 +15,5 @@ public interface BitCoinAccountRuleService extends BaseService<BitCoinAccountRul
 
     void init(Member member, BitCoinAccount bitCoinAccount);
 
-    BitCoinAccountRule findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId);
+    BitCoinAccountRule findByAssetType(Integer assetType);
 }

@@ -58,6 +58,7 @@ public class EthAdminServiceImpl implements EthAdminService {
     public String ethGetBalance(String address) {
         try{
             EthGetBalance ethGetBalance = admin.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
+            System.out.println(address);
             BigDecimal bigDecimal = new BigDecimal(ethGetBalance.getBalance());
             return Convert.fromWei(bigDecimal, Convert.Unit.ETHER).toString();
         }catch (Exception e){
@@ -84,16 +85,7 @@ public class EthAdminServiceImpl implements EthAdminService {
             BigInteger gasPrice = send.getGasPrice();
             EthGetTransactionCount transactionCount = web3j.ethGetTransactionCount(from.getAccountId(), DefaultBlockParameterName.LATEST).send();
             BigInteger nonce = transactionCount.getTransactionCount();
-
-
-            EthGetTransactionCount transactionCount1 = web3j.ethGetTransactionCount(from.getAccountId(), DefaultBlockParameterName.EARLIEST).send();
-            BigInteger nonce1 = transactionCount1.getTransactionCount();
-
-
-            EthGetTransactionCount transactionCount2 = web3j.ethGetTransactionCount(from.getAccountId(), DefaultBlockParameterName.PENDING).send();
-            BigInteger nonce2 = transactionCount2.getTransactionCount();
-
-            Transaction transaction = Transaction.createEtherTransaction(from.getAccountId(),nonce,gasPrice,new BigInteger("21000"),to.getAccountId(),value);
+            Transaction transaction = Transaction.createEtherTransaction(from.getAccountId(),nonce,gasPrice,gasPrice,to.getAccountId(),value);
             EthSendTransaction ethSendTransaction = admin.personalSendTransaction(transaction, from.getUsername()).send();
             return ethSendTransaction.getTransactionHash();
         }catch (Exception e){

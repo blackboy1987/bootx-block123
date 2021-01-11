@@ -1,21 +1,20 @@
 package com.bootx.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
  * @author black
  */
 @Entity
-@Table(name = "BitCoinAccountRule", uniqueConstraints = { @UniqueConstraint(columnNames = { "userId", "bitCoinAccountId","assetType" })})
+@Table(name = "BitCoinAccountRule")
 public class BitCoinAccountRule extends BaseEntity<Long> {
 
-    private Long userId;
-
-    private Long bitCoinAccountId;
-
+    @NotNull
+    @Column(nullable = false,updatable = false,unique = true)
     private Integer assetType;
 
     private Boolean canRecharge;
@@ -24,16 +23,22 @@ public class BitCoinAccountRule extends BaseEntity<Long> {
 
     private Boolean canTrade;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal rechargeLimit;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal rechargeRate;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal rechargeMax;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal withdrawLimit;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal withdrawRate;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal withdrawMax;
 
     private Boolean activation;
@@ -45,22 +50,6 @@ public class BitCoinAccountRule extends BaseEntity<Long> {
     private String productName;
 
     private String name;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getBitCoinAccountId() {
-        return bitCoinAccountId;
-    }
-
-    public void setBitCoinAccountId(Long bitCoinAccountId) {
-        this.bitCoinAccountId = bitCoinAccountId;
-    }
 
     public Integer getAssetType() {
         return assetType;

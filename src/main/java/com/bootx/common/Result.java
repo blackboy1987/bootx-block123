@@ -91,6 +91,9 @@ public class Result {
 	public static Result ok (Integer type, String message,String content, Object date) {
 		return new Result(type,200,message,content,date);
 	}
+	public static Result ok (Integer type, Integer code) {
+		return new Result(type,code,null,null,null);
+	}
 
 	public static Result success(Object data) {
 		return new Result(200,0, "请求成功","请求成功", data);

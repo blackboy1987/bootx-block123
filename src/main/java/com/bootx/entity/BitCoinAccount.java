@@ -47,6 +47,8 @@ public class BitCoinAccount extends BaseEntity<Long> {
     @Column(precision = 27, scale = 12)
     private BigDecimal price;
 
+    private String addressId;
+
     public Long getUserId() {
         return userId;
     }
@@ -101,5 +103,13 @@ public class BitCoinAccount extends BaseEntity<Long> {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 }

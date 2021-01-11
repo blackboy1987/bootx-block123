@@ -129,47 +129,6 @@ public class IndexController {
     }
 
 
-
-
-
-    @PostMapping("/receipt/receipt")
-    public Result receipt(HttpServletRequest request,@CurrentUser Member member){
-        if(member==null){
-            member = memberService.getCurrent(request);
-        }
-        if(member==null){
-            return Result.error("登录信息已过期");
-        }
-        Map<String,Object> data = new HashMap<>();
-        data.put("area",member.getBankArea());
-        data.put("bankCard",member.getBankCard());
-        data.put("theirBank",member.getBankName());
-        return Result.success(data);
-    }
-
-    /**
-     * 设置收款信息
-     * @param request
-     * @param member
-     * @param bankCard
-     * @param theirBank
-     * @param area
-     * @return
-     */
-    @PostMapping("/receipt/create")
-    public Result receiptCreate(HttpServletRequest request,@CurrentUser Member member,String bankCard,String theirBank,String area){
-        if(member==null){
-            member = memberService.getCurrent(request);
-        }
-        if(member==null){
-            return Result.error("登录信息已过期");
-        }
-        member.setBankArea(area);
-        member.setBankName(theirBank);
-        member.setBankCard(bankCard);
-        memberService.update(member);
-        return Result.success("");
-    }
     @PostMapping("/v2/new/detail")
     @JsonView(BaseEntity.ViewView.class)
     public Result newsDetail(HttpServletRequest request, @CurrentUser Member member, Integer type){

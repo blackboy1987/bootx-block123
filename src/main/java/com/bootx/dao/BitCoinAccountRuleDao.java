@@ -11,5 +11,5 @@ import com.bootx.entity.BitCoinAccountRule;
  */
 public interface BitCoinAccountRuleDao extends BaseDao<BitCoinAccountRule, Long> {
 
-    BitCoinAccountRule findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId);
+    BitCoinAccountRule findByAssetType(Integer assetType);
 }

@@ -27,4 +27,8 @@ public interface BitCoinAccountService extends BaseService<BitCoinAccount, Long>
     BigDecimal getAmount(Long userId, Integer coinType);
 
     void addMoney(AccountLog accountLog);
+
+    BitCoinAccount findByAddressIdAndAssetType(String addressId, Integer asset);
+
+    boolean transaction(BitCoinAccount bitCoinAccount, BitCoinAccount toBitCoinAccount, BigDecimal money);
 }

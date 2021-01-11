@@ -30,10 +30,10 @@ public class AccountLogServiceImpl extends BaseServiceImpl<AccountLog, Long> imp
     }
 
     @Override
-    public AccountLog create(Member member, BitCoinAccount bitCoinAccount, BigDecimal money, Integer dataType) {
+    public AccountLog create(Member member, BitCoinAccount bitCoinAccount, BigDecimal money, Integer dataType,String title) {
         if(member!=null&&bitCoinAccount!=null&&money!=null&&money.compareTo(BigDecimal.ZERO)>0&&dataType!=null){
             AccountLog accountLog = new AccountLog();
-            accountLog.setTitle(bitCoinAccount.getName()+"充值");
+            accountLog.setTitle(title);
             accountLog.setAssetType(bitCoinAccount.getAssetType());
             accountLog.setMoney(money);
             accountLog.setBeforeMoney(bitCoinAccount.getMoney());

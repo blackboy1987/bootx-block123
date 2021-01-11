@@ -57,10 +57,14 @@ dependencies {
     compile 'org.web3j:geth:5.0.0'
     compile 'org.web3j:parity:5.0.0'
     compile 'org.web3j:utils:5.0.0'
-    compile 'org.web3j:core:5.0.0'
+    compile('org.web3j:core:5.0.0') {
+        exclude group: 'com.squareup.okhttp3'
+    }
     compile 'org.web3j:abi:5.0.0'
     compile 'org.web3j:contracts:5.0.0'
     compile 'org.bitcoinj:bitcoinj-core:0.15.8'
+    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
+
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'

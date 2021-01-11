@@ -10,7 +10,7 @@ import org.web3j.protocol.http.HttpService;
 @Component
 public class Web3jConfig {
 
-    private String web3jUrl="http://localhost:8485";
+    private String web3jUrl="http://112.30.128.218:8545";
 
     @Bean
     public Web3j web3j(){

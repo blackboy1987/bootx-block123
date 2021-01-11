@@ -1,6 +1,7 @@
 
 package com.bootx.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
@@ -12,8 +13,10 @@ import java.math.BigDecimal;
 public class ElectricDiscount extends BaseEntity<Long> {
 
     private Long productId;
+    @Column(precision = 27, scale = 12)
     private BigDecimal discount;
     private Integer day;
+    @Column(precision = 27, scale = 12)
     private BigDecimal deduction;
     private Integer tag;
     private Boolean enable;

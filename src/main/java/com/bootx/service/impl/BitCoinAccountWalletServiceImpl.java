@@ -1,13 +1,18 @@
 
 package com.bootx.service.impl;
+
 import com.bootx.dao.BitCoinAccountWalletDao;
 import com.bootx.entity.BitCoinAccount;
 import com.bootx.entity.BitCoinAccountWallet;
 import com.bootx.entity.Member;
+import com.bootx.eth.service.EthAdminService;
 import com.bootx.service.BitCoinAccountWalletService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 /**
@@ -21,6 +26,9 @@ public class BitCoinAccountWalletServiceImpl extends BaseServiceImpl<BitCoinAcco
     @Autowired
     private BitCoinAccountWalletDao bitCoinAccountWalletDao;
 
+    @Resource
+    private EthAdminService ethAdminService;
+
     @Override
     public void init(Member member, BitCoinAccount bitCoinAccount) {
         BitCoinAccountWallet bitCoinAccountWallet = new BitCoinAccountWallet();
@@ -33,12 +41,20 @@ public class BitCoinAccountWalletServiceImpl extends BaseServiceImpl<BitCoinAcco
         bitCoinAccountWallet.setState(0);
         bitCoinAccountWallet.setName(bitCoinAccount.getName());
         bitCoinAccountWallet.setMinLength(0);
+        bitCoinAccountWallet.setWalletAdd(bitCoinAccount.getAddressId());
         super.save(bitCoinAccountWallet);
 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BitCoinAccountWallet findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId) {
-        return bitCoinAccountWalletDao.findByBitCoinAccountIdAndUserId( bitCoinAccountId, userId);
+
+        BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletDao.findByBitCoinAccountIdAndUserId( bitCoinAccountId, userId);
+        if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccountWallet.getName())){
+            bitCoinAccountWallet.setPrice(BigDecimal.valueOf(Double.parseDouble(ethAdminService.ethGetBalance(bitCoinAccountWallet.getWalletAdd()))));
+            bitCoinAccountWallet.setMoney(bitCoinAccountWallet.getPrice().divide(new BigDecimal(2)));
+        }
+        return bitCoinAccountWallet;
     }
 }

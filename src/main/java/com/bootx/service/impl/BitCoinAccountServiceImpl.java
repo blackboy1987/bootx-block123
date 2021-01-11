@@ -3,11 +3,19 @@ package com.bootx.service.impl;
 
 
 import com.bootx.dao.BitCoinAccountDao;
-import com.bootx.entity.*;
+import com.bootx.entity.AccountLog;
+import com.bootx.entity.BitCoinAccount;
+import com.bootx.entity.BitCoinType;
+import com.bootx.entity.Member;
+import com.bootx.eth.service.EthAdminService;
 import com.bootx.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -35,10 +43,20 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 	private BitCoinAccountWalletService bitCoinAccountWalletService;
 	@Autowired
 	private BitCoinAccountBankService bitCoinAccountBankService;
+	@Resource
+	private EthAdminService ethAdminService;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BitCoinAccount> findByUserId(Long userId) {
-		return bitCoinAccountDao.findByUserId(userId);
+		List<BitCoinAccount> bitCoinAccounts = bitCoinAccountDao.findByUserId(userId);
+		for (BitCoinAccount bitCoinAccount:bitCoinAccounts) {
+			if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccount.getName())){
+				bitCoinAccount.setPrice(BigDecimal.valueOf(Double.parseDouble(ethAdminService.ethGetBalance(bitCoinAccount.getAddressId()))));
+				bitCoinAccount.setMoney(bitCoinAccount.getPrice().divide(new BigDecimal(2)));
+			}
+		}
+		return bitCoinAccounts;
 	}
 
 	@Override
@@ -60,6 +78,15 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 				bitCoinAccount.setPrice(bitCoinType.getPrice());
 				bitCoinAccount.setState(true);
 				bitCoinAccount.setUserId(member.getId());
+
+				if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccount.getName())){
+					NewAccountIdentifier newAccountIdentifier = ethAdminService.newAccountIdentifier(member.getUsername());
+					if(newAccountIdentifier!=null){
+						bitCoinAccount.setAddressId(newAccountIdentifier.getAccountId());
+						member.setAccountId(bitCoinAccount.getAddressId());
+						memberService.update(member);
+					}
+				}
 				bitCoinAccount = super.save(bitCoinAccount);
 				bitCoinAccountBankService.init(member,bitCoinAccount);
 				bitCoinAccountMoneyService.init(member,bitCoinAccount);
@@ -97,6 +124,24 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 				super.save(bitCoinAccount);
 			}
 		}
+	}
+
+	@Override
+	public BitCoinAccount findByAddressIdAndAssetType(String addressId, Integer asset) {
+		return bitCoinAccountDao.findByAddressIdAndAssetType(addressId,asset);
+	}
+
+	@Override
+	public boolean transaction(BitCoinAccount bitCoinAccount, BitCoinAccount toBitCoinAccount, BigDecimal money) {
+		Member from = memberService.find(bitCoinAccount.getUserId());
+		Member to = memberService.find(toBitCoinAccount.getUserId());
+		if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccount.getName())){
+			from.setAccountId(bitCoinAccount.getAddressId());
+			to.setAccountId(toBitCoinAccount.getAddressId());
+			String result = ethAdminService.transferEther(from,to,money);
+			System.out.println(result);
+		}
+		return true;
 	}
 
 	private BitCoinAccount initAccount(Member member, Integer assetType) {

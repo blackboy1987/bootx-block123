@@ -47,11 +47,13 @@ public class MineMachine extends BaseEntity<Long> {
      * rmb价格
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal rmbPrice;
     /**
      * 价格
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal price;
     /**
      *
@@ -62,21 +64,25 @@ public class MineMachine extends BaseEntity<Long> {
      * 算力
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal profit;
     /**
      * rmb电费价格
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal rmbElectricPrice;
     /**
      * 电费
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal electric;
     /**
      * 电费折扣
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal electricDiscount;
 
     /**
@@ -149,6 +155,7 @@ public class MineMachine extends BaseEntity<Long> {
      * 总费用
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal money;
     /**
      * 库存数量
@@ -194,6 +201,7 @@ public class MineMachine extends BaseEntity<Long> {
      * hbt 折扣
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal hbtDiscount;
     /**
      * hbt 折扣类型
@@ -249,6 +257,7 @@ public class MineMachine extends BaseEntity<Long> {
      *
      */
     @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
     private BigDecimal exchangeRate;
     /**
      * 产品id

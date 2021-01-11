@@ -1,6 +1,7 @@
 package com.bootx.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
@@ -24,10 +25,13 @@ public class AccountLog extends BaseEntity<Long>{
      */
     private Integer state;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal money;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal beforeMoney;
 
+    @Column(precision = 27, scale = 12)
     private BigDecimal afterMoney;
 
     private Integer assetType;

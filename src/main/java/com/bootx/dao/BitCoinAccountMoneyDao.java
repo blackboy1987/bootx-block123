@@ -1,6 +1,7 @@
 
 package com.bootx.dao;
 
+import com.bootx.entity.BitCoinAccount;
 import com.bootx.entity.BitCoinAccountMoney;
 
 /**
@@ -11,5 +12,5 @@ import com.bootx.entity.BitCoinAccountMoney;
  */
 public interface BitCoinAccountMoneyDao extends BaseDao<BitCoinAccountMoney, Long> {
 
-    BitCoinAccountMoney findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId);
+    BitCoinAccountMoney findByBitCoinAccountIdAndUserId(BitCoinAccount bitCoinAccount, Long userId);
 }
