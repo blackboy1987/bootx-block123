@@ -25,6 +25,9 @@ public class BitCoinAccountWallet extends BaseEntity<Long> {
     @Column(precision = 27, scale = 12)
     private BigDecimal frozenMoney;
 
+    /**
+     * 价格。注意得动态修改得。
+     */
     @Column(precision = 27, scale = 12)
     private BigDecimal price;
 

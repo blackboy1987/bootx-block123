@@ -208,7 +208,7 @@ public class CommonController {
         result.put("policy","policy");
         result.put("signature",credentials.getSecurityToken());
         result.put("dir","dir");
-        result.put("host","host");
+        result.put("host","http://localhost:80/common/upload");
         result.put("expire",credentials.getExpiration());
         return Result.success(result);
     }
@@ -226,7 +226,6 @@ public class CommonController {
 
     /**
      * 忘记资金密码的短信发送
-     * @param tel
      * @return
      */
     @PostMapping("/code/phone/forget_money_pass")

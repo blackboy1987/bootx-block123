@@ -91,7 +91,7 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 				bitCoinAccountBankService.init(member,bitCoinAccount);
 				bitCoinAccountMoneyService.init(member,bitCoinAccount);
 				bitCoinAccountWalletService.init(member,bitCoinAccount);
-				bitCoinAccountRuleService.init(member,bitCoinAccount);
+				// bitCoinAccountRuleService.init(member,bitCoinAccount);
 			}
 		}
 	}

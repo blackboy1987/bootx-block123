@@ -20,15 +20,9 @@ import java.util.Map;
 public class IndexController {
 
     @Autowired
-    private BitCoinAccountService bitCoinAccountService;
-    @Autowired
     private MemberService memberService;
     @Autowired
-    private CacheService cacheService;
-    @Autowired
     private ArticleService articleService;
-    @Autowired
-    private InvestService investService;
 
     @PostMapping("/info/index")
     public Result infoIndex(@CurrentUser Member member,HttpServletRequest request){
@@ -149,32 +143,6 @@ public class IndexController {
             return Result.error("登录信息已过期");
         }
         return Result.success(memberService.findListTeam(member));
-    }
-
-    /**
-     * 收益列表
-     * @param request
-     * @param member
-     * @return
-     */
-    @PostMapping("/profit/list")
-    public Result profitList(HttpServletRequest request, @CurrentUser Member member,Integer coinType){
-        if(member==null){
-            member = memberService.getCurrent(request);
-        }
-        if(member==null){
-            return Result.error("登录信息已过期");
-        }
-        Map<String,Object> data = new HashMap<>();
-        data.put("allHpt",123.86);
-        data.put("allHptPrice",82.11);
-        data.put("allEth",0);
-        data.put("allBtcPrice",45.18);
-        data.put("allBtc",0.0003512);
-        data.put("allEthPrice",0);
-        data.put("list", investService.findListByCoinType(member,coinType));
-
-        return Result.success(data);
     }
 
 }

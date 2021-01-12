@@ -87,4 +87,8 @@ public class CommonController {
         return Result.success(list);
     }
 
+    @PostMapping("/oss/sts/auth")
+    public Result auth(String key){
+        return Result.success(key);
+    }
 }

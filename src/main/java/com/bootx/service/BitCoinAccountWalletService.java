@@ -5,6 +5,8 @@ import com.bootx.entity.BitCoinAccount;
 import com.bootx.entity.BitCoinAccountWallet;
 import com.bootx.entity.Member;
 
+import java.math.BigDecimal;
+
 /**
  * Service - 广告
  * 
@@ -16,4 +18,6 @@ public interface BitCoinAccountWalletService extends BaseService<BitCoinAccountW
     void init(Member member, BitCoinAccount bitCoinAccount);
 
     BitCoinAccountWallet findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId);
+
+    BigDecimal sumMoney(Long userId);
 }
