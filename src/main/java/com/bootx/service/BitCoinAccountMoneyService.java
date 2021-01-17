@@ -13,7 +13,7 @@ import com.bootx.entity.Member;
  */
 public interface BitCoinAccountMoneyService extends BaseService<BitCoinAccountMoney, Long> {
 
-    void init(Member member, BitCoinAccount bitCoinAccount);
+    BitCoinAccountMoney init(Member member, BitCoinAccount bitCoinAccount);
 
-    BitCoinAccountMoney findByBitCoinAccountIdAndUserId(BitCoinAccount bitCoinAccount, Long userId);
+    BitCoinAccountMoney findByBitCoinAccountIdAndUserId(BitCoinAccount bitCoinAccount, Member member);
 }

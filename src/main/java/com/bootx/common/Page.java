@@ -141,6 +141,7 @@ public class Page<T> implements Serializable {
 	 * 
 	 * @return 总页数
 	 */
+	@JsonView({BaseEntity.BaseView.class, BaseEntity.PageView.class, BaseEntity.ListView.class, BaseEntity.EditView.class, BaseEntity.ViewView.class})
 	public int getTotalPages() {
 		return (int) Math.ceil((double) getTotal() / (double) getPageSize());
 	}

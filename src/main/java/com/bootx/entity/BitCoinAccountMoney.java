@@ -23,6 +23,9 @@ public class BitCoinAccountMoney extends BaseEntity<Long> {
     @Column(precision = 27, scale = 12)
     private BigDecimal frozenMoney;
 
+    @Column(precision = 27, scale = 12)
+    private BigDecimal lockMoney;
+
     private Integer state;
 
     private String name;
@@ -42,6 +45,7 @@ public class BitCoinAccountMoney extends BaseEntity<Long> {
         this.state = 0;
         this.name = bitCoinAccount.getName();
         this.price = bitCoinAccount.getPrice();
+        this.lockMoney = BigDecimal.ZERO;
     }
 
     public Long getUserId() {
@@ -82,6 +86,14 @@ public class BitCoinAccountMoney extends BaseEntity<Long> {
 
     public void setFrozenMoney(BigDecimal frozenMoney) {
         this.frozenMoney = frozenMoney;
+    }
+
+    public BigDecimal getLockMoney() {
+        return lockMoney;
+    }
+
+    public void setLockMoney(BigDecimal lockMoney) {
+        this.lockMoney = lockMoney;
     }
 
     public Integer getState() {

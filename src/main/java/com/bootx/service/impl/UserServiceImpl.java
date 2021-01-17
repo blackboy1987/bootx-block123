@@ -12,11 +12,13 @@ import com.bootx.security.SocialUserAuthenticationToken;
 import com.bootx.security.UserAuthenticationToken;
 import com.bootx.service.UserService;
 import com.bootx.util.SystemUtils;
+import com.bootx.util.WebUtils;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -172,6 +174,17 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			User user = userDao.find(principal.getId(), lockModeType);
 			if (userClass == null || (user != null && userClass.isAssignableFrom(user.getClass()))) {
 				return (T) user;
+			}
+		}else{
+			if(StringUtils.equals(userClass.getSimpleName(),"Member")){
+				try{
+					String userId1 = WebUtils.getRequest().getHeader("userId1");
+					return (T) find(Long.valueOf(userId1));
+				}catch (Exception e){
+					return null;
+				}
+			}else {
+				return null;
 			}
 		}
 		return null;

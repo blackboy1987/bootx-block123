@@ -27,7 +27,7 @@ public class BitCoinAccountMoneyDaoImpl extends BaseDaoImpl<BitCoinAccountMoney,
         Root<BitCoinAccountMoney> root = criteriaQuery.from(BitCoinAccountMoney.class);
         criteriaQuery.select(root);
         if(bitCoinAccount==null|| userId==null){
-            return new BitCoinAccountMoney();
+            return null;
         }
         Predicate restrictions = criteriaBuilder.conjunction();
         restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("bitCoinAccountId"), bitCoinAccount.getId()));
@@ -36,7 +36,7 @@ public class BitCoinAccountMoneyDaoImpl extends BaseDaoImpl<BitCoinAccountMoney,
         try{
             return super.findList(criteriaQuery, null, null, null, null).get(0);
         }catch (Exception e){
-            return new BitCoinAccountMoney(userId,bitCoinAccount);
+            return null;
         }
     }
 }

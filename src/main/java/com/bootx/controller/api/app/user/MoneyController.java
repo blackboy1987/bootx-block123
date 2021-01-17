@@ -47,7 +47,7 @@ public class MoneyController extends BaseController {
             return Result.error("登录信息已过期，请重新登录");
         } else {
             BitCoinAccount bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(member.getId(), asset);
-            BitCoinAccountMoney bitCoinAccountMoney =  bitCoinAccountMoneyService.findByBitCoinAccountIdAndUserId(bitCoinAccount, member.getId());
+            BitCoinAccountMoney bitCoinAccountMoney =  bitCoinAccountMoneyService.findByBitCoinAccountIdAndUserId(bitCoinAccount, member);
             Map<String, Object> data = new HashMap();
             data.put("coinNum", 1);
             data.put("withdraw", bitCoinAccountMoney.getMoney().subtract(bitCoinAccountMoney.getFrozenMoney()));
