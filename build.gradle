@@ -66,6 +66,7 @@ dependencies {
     compile 'org.bitcoinj:bitcoinj-core:0.15.8'
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
 
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'

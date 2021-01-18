@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("adminAccountLogController")
-@RequestMapping("/admin/account_log")
+@RequestMapping("/block/admin/account_log")
 public class AccountLogController extends BaseController {
 
     @Autowired

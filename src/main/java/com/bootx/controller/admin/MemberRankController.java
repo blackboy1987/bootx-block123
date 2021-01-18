@@ -20,7 +20,7 @@ import java.math.BigDecimal;
  * @version 6.1
  */
 @RestController("adminMemberRankController")
-@RequestMapping("/admin/member_rank")
+@RequestMapping("/block/admin/member_rank")
 public class MemberRankController extends BaseController {
 
 	@Resource

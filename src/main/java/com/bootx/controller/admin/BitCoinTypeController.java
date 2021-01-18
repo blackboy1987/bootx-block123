@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("adminBitCoinTypeController")
-@RequestMapping("/admin/bit_coin_type")
+@RequestMapping("/block/admin/bit_coin_type")
 public class BitCoinTypeController extends BaseController {
 
     @Autowired

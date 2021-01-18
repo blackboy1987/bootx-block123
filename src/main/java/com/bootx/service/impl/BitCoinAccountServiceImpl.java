@@ -3,10 +3,7 @@ package com.bootx.service.impl;
 
 
 import com.bootx.dao.BitCoinAccountDao;
-import com.bootx.entity.AccountLog;
-import com.bootx.entity.BitCoinAccount;
-import com.bootx.entity.BitCoinType;
-import com.bootx.entity.Member;
+import com.bootx.entity.*;
 import com.bootx.eth.service.EthAdminService;
 import com.bootx.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -142,6 +139,17 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 			System.out.println(result);
 		}
 		return true;
+	}
+
+	@Override
+	public void updateBitCoinMoney(BitCoinAccount bitCoinAccount,BigDecimal money,Member member) {
+		bitCoinAccount.setMoney(money);
+		update(bitCoinAccount);
+		BitCoinAccountMoney bitCoinAccountMoney = bitCoinAccountMoneyService.findByBitCoinAccountIdAndUserId(bitCoinAccount,member);
+		bitCoinAccountMoney.setMoney(money);
+		BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletService.findByBitCoinAccountIdAndUserId(bitCoinAccount.getId(),member.getId());
+		bitCoinAccountWallet.setMoney(money);
+		bitCoinAccountWalletService.update(bitCoinAccountWallet);
 	}
 
 	private BitCoinAccount initAccount(Member member, Integer assetType) {

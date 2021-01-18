@@ -31,4 +31,6 @@ public interface BitCoinAccountService extends BaseService<BitCoinAccount, Long>
     BitCoinAccount findByAddressIdAndAssetType(String addressId, Integer asset);
 
     boolean transaction(BitCoinAccount bitCoinAccount, BitCoinAccount toBitCoinAccount, BigDecimal money);
+
+    void updateBitCoinMoney(BitCoinAccount bitCoinAccount,BigDecimal money,Member member);
 }

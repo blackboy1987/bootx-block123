@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("adminMineMachineOrderController")
-@RequestMapping("/admin/mine_machine_order")
+@RequestMapping("/block/admin/mine_machine_order")
 public class MineMachineOrderController extends BaseController {
 
     @Autowired

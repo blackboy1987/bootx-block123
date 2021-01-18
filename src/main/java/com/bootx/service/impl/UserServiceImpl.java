@@ -11,6 +11,7 @@ import com.bootx.security.AuthenticationProvider;
 import com.bootx.security.SocialUserAuthenticationToken;
 import com.bootx.security.UserAuthenticationToken;
 import com.bootx.service.UserService;
+import com.bootx.util.JWTUtils;
 import com.bootx.util.SystemUtils;
 import com.bootx.util.WebUtils;
 import net.sf.ehcache.CacheManager;
@@ -180,6 +181,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 				try{
 					String userId1 = WebUtils.getRequest().getHeader("userId1");
 					return (T) find(Long.valueOf(userId1));
+				}catch (Exception e){
+					return null;
+				}
+			}else if(StringUtils.equals(userClass.getSimpleName(),"Admin")){
+				try{
+					String token = WebUtils.getRequest().getHeader("token");
+					return (T) find(Long.valueOf(JWTUtils.parseToken(token).getId()));
 				}catch (Exception e){
 					return null;
 				}

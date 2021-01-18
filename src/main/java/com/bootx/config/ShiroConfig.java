@@ -1,5 +1,6 @@
 package com.bootx.config;
 
+import com.bootx.entity.Admin;
 import com.bootx.entity.Member;
 import com.bootx.security.AuthenticationFilter;
 import com.bootx.security.AuthorizingRealm;
@@ -72,6 +73,14 @@ public class ShiroConfig {
     }
 
 
+    @Bean
+    public AuthenticationFilter adminAuthc(){
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
+        authenticationFilter.setUserClass(Admin.class);
+        authenticationFilter.setLoginUrl("/admin/login");
+        authenticationFilter.setSuccessUrl("/admin/index");
+        return authenticationFilter;
+    }
 
     @Bean
     public MethodInvokingFactoryBean methodInvokingFactoryBean (){

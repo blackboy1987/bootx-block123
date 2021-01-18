@@ -1,48 +1,57 @@
 package com.bootx.controller.admin;
 
+import com.bootx.entity.Admin;
+import com.bootx.security.UserAuthenticationToken;
+import com.bootx.service.AdminService;
+import com.bootx.service.UserService;
+import com.bootx.util.JWTUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController("adminLoginController")
-@RequestMapping("/admin/login")
+@RequestMapping("/block/admin/login")
 public class LoginController extends BaseController {
 
-    @PostMapping
-    public Map<String,Object> index(){
-        Map<String,Object> data=  new HashMap<>();
-        data.put("currentAuthority","admin");
-        data.put("status","ok");
-        data.put("type","account");
-        return data;
-    }
+    @Resource
+    private AdminService adminService;
+    @Resource
+    private UserService userService;
 
-    private Map<String,Object> getUser() {
-        /**
-         * avatar?: string;
-         *     name?: string;
-         *     title?: string;
-         *     group?: string;
-         *     signature?: string;
-         *     tags?: {
-         *       key: string;
-         *       label: string;
-         *     }[];
-         *     userid?: string;
-         *     access?: 'user' | 'guest' | 'admin';
-         *     unreadCount?: number;
-         */
-        Map<String,Object> data=  new HashMap<>();
-        data.put("name","name");
-        data.put("title","title");
-        data.put("group","group");
-        data.put("signature","signature");
-        data.put("userid","123");
-        data.put("access","admin");
-        data.put("unreadCount",0);
+    @PostMapping
+    public Map<String,Object> index(String type,String username, String password, HttpServletRequest request) {
+        Map<String,Object> data = new HashMap<>();
+        data.put("type",type);
+        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+            data.put("status","error");
+            data.put("content","请输入用户名或密码");
+            return data;
+        }
+        Admin admin = adminService.findByUsername(username);
+        if(admin==null){
+            data.put("status","error");
+            data.put("content","用户名或密码输入错误");
+            return data;
+        }
+        if(!admin.isValidCredentials(password)){
+            data.put("status","error");
+            data.put("content","用户名或密码输入错误");
+            return data;
+        }
+        data.put("status","ok");
+        data.put("content","登陆成功");
+        Map<String,Object> user = new HashMap<>();
+        user.put("id",admin.getId());
+        user.put("username",admin.getUsername());
+        data.put("user",user);
+        data.put("token", JWTUtils.create(admin.getId()+"",user));
+        userService.login(new UserAuthenticationToken(Admin.class, username, password, false, request.getRemoteAddr()));
         return data;
     }
 }

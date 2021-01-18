@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("adminCompanyBankController")
-@RequestMapping("/admin/company_bank")
+@RequestMapping("/block/admin/company_bank")
 public class CompanyBankController extends BaseController {
 
     @Autowired
