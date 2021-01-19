@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface ReceiptAccountDao extends BaseDao<ReceiptAccount, Long> {
     List<ReceiptAccount> findList(Long userId, Integer type);
+
+    List<ReceiptAccount> findListByUserId(Long userId);
 }

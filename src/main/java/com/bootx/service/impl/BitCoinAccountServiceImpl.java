@@ -148,8 +148,10 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 		BitCoinAccountMoney bitCoinAccountMoney = bitCoinAccountMoneyService.findByBitCoinAccountIdAndUserId(bitCoinAccount,member);
 		bitCoinAccountMoney.setMoney(money);
 		BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletService.findByBitCoinAccountIdAndUserId(bitCoinAccount.getId(),member.getId());
-		bitCoinAccountWallet.setMoney(money);
-		bitCoinAccountWalletService.update(bitCoinAccountWallet);
+		if(bitCoinAccountWallet!=null){
+			bitCoinAccountWallet.setMoney(money);
+			bitCoinAccountWalletService.update(bitCoinAccountWallet);
+		}
 	}
 
 	private BitCoinAccount initAccount(Member member, Integer assetType) {

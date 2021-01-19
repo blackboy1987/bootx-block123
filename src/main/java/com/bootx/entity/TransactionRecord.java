@@ -3,11 +3,17 @@ package com.bootx.entity;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 public class TransactionRecord extends BaseEntity<Long>{
+
+    @NotEmpty
+    @Column(nullable = false,updatable = false,unique = true)
+    @JsonView({ListView.class,ViewView.class})
+    private String sn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     public Member seller;
@@ -68,11 +74,30 @@ public class TransactionRecord extends BaseEntity<Long>{
     @JsonView({ListView.class,ViewView.class})
     private Date confirmDate;
 
+    private String bankCard;
+
+    private String theirBank;
+
+    private String area;
+
+    private String name;
+
+    private Integer payType;
+
+
     /**
      * 过期时间
      */
     @JsonView({ListView.class,ViewView.class})
     private Date expire;
+
+    public String getSn() {
+        return sn;
+    }
+
+    public void setSn(String sn) {
+        this.sn = sn;
+    }
 
     public Member getSeller() {
         return seller;
@@ -168,6 +193,46 @@ public class TransactionRecord extends BaseEntity<Long>{
 
     public void setConfirmDate(Date confirmDate) {
         this.confirmDate = confirmDate;
+    }
+
+    public String getBankCard() {
+        return bankCard;
+    }
+
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard;
+    }
+
+    public String getTheirBank() {
+        return theirBank;
+    }
+
+    public void setTheirBank(String theirBank) {
+        this.theirBank = theirBank;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
     }
 
     @Transient

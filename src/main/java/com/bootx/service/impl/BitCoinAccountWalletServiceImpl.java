@@ -51,6 +51,9 @@ public class BitCoinAccountWalletServiceImpl extends BaseServiceImpl<BitCoinAcco
     public BitCoinAccountWallet findByBitCoinAccountIdAndUserId(Long bitCoinAccountId, Long userId) {
 
         BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletDao.findByBitCoinAccountIdAndUserId( bitCoinAccountId, userId);
+        if(bitCoinAccountWallet==null){
+            return null;
+        }
         if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccountWallet.getName())){
             bitCoinAccountWallet.setPrice(BigDecimal.valueOf(Double.parseDouble(ethAdminService.ethGetBalance(bitCoinAccountWallet.getWalletAdd()))));
             bitCoinAccountWallet.setMoney(bitCoinAccountWallet.getPrice().divide(new BigDecimal(2)));

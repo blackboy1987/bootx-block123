@@ -8,7 +8,6 @@ import com.bootx.entity.*;
 import com.bootx.security.CurrentUser;
 import com.bootx.service.*;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,16 +22,14 @@ public class SellController extends BaseController {
 
     @Resource
     private TransactionRecordService transactionRecordService;
-    @Autowired
+    @Resource
     private BitCoinAccountService bitCoinAccountService;
-    @Autowired
-    private BitCoinAccountBankService bitCoinAccountBankService;
-    @Autowired
+    @Resource
     private BitCoinAccountMoneyService bitCoinAccountMoneyService;
-    @Autowired
-    private BitCoinAccountWalletService bitCoinAccountWalletService;
-    @Autowired
-    private BitCoinAccountRuleService bitCoinAccountRuleService;
+    @Resource
+    private SnService snService;
+    @Resource
+    private ReceiptAccountService receiptAccountService;
 
     @PostMapping("/list")
     @JsonView(BaseEntity.ListView.class)
@@ -50,7 +47,14 @@ public class SellController extends BaseController {
 
     @PostMapping("/submit")
     @JsonView(BaseEntity.ViewView.class)
-    public Result submit(@CurrentUser Member member, BigDecimal rmbAmount,BigDecimal jlbCount){
+    public Result submit(@CurrentUser Member member, BigDecimal rmbAmount,BigDecimal jlbCount,Long payInfoId){
+
+
+        ReceiptAccount receiptAccount = receiptAccountService.find(payInfoId);
+        if(receiptAccount==null || receiptAccount.getUserId().compareTo(member.getId())!=0){
+            return Result.error("支付方式选择不合法，挂单失败");
+        }
+
         BitCoinAccount bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(member.getId(), 6);
         BitCoinAccountMoney bitCoinAccountMoney =  bitCoinAccountMoneyService.findByBitCoinAccountIdAndUserId(bitCoinAccount, member);
         // 可用币的金额
@@ -60,6 +64,7 @@ public class SellController extends BaseController {
             return Result.error("账户余额不足，挂单失败");
         }
         TransactionRecord transactionRecord = new TransactionRecord();
+        transactionRecord.setSn(snService.generate(Sn.Type.ORDER));
         transactionRecord.setType(0);
         transactionRecord.setStatus(1);
         transactionRecord.setHandlingFeesRate(new BigDecimal(0.08));
@@ -67,6 +72,15 @@ public class SellController extends BaseController {
         transactionRecord.setRmbAmount(rmbAmount);
         transactionRecord.setSeller(member);
         transactionRecord.setJlbCount(jlbCount);
+
+        transactionRecord.setBankCard(receiptAccount.getBankCard());
+        transactionRecord.setTheirBank(receiptAccount.getTheirBank());
+        transactionRecord.setArea( receiptAccount.getArea());
+        transactionRecord.setName(receiptAccount.getName());
+        transactionRecord.setPayType(receiptAccount.getType());
+
+
+
         transactionRecordService.save(transactionRecord);
         // 冻结
         if(bitCoinAccountMoney.getLockMoney()==null){

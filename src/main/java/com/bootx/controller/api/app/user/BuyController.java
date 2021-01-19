@@ -6,8 +6,10 @@ import com.bootx.common.Result;
 import com.bootx.controller.admin.BaseController;
 import com.bootx.entity.BaseEntity;
 import com.bootx.entity.Member;
+import com.bootx.entity.Sn;
 import com.bootx.entity.TransactionRecord;
 import com.bootx.security.CurrentUser;
+import com.bootx.service.SnService;
 import com.bootx.service.TransactionRecordService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +27,8 @@ public class BuyController extends BaseController {
 
     @Resource
     private TransactionRecordService transactionRecordService;
+    @Resource
+    private SnService snService;
 
 
     @PostMapping("/list")
@@ -60,6 +64,7 @@ public class BuyController extends BaseController {
         if(StringUtils.isBlank(image)){
             return Result.error("请上传交易凭证");
         }
+        transactionRecord.setSn(snService.generate(Sn.Type.ORDER));
         transactionRecord.setBuyDate(new Date());
         transactionRecord.setBuyer(member);
         transactionRecord.setStatus(2);

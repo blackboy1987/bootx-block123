@@ -25,4 +25,9 @@ public class ReceiptAccountServiceImpl extends BaseServiceImpl<ReceiptAccount, L
     public List<ReceiptAccount> findList(Long userId, Integer type) {
         return receiptAccountDao.findList(userId,type);
     }
+
+    @Override
+    public List<ReceiptAccount> findListByUserId(Long userId) {
+        return receiptAccountDao.findListByUserId(userId);
+    }
 }

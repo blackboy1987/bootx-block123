@@ -25,9 +25,6 @@ public class BitCoinAccountWalletDaoImpl extends BaseDaoImpl<BitCoinAccountWalle
         CriteriaQuery<BitCoinAccountWallet> criteriaQuery = criteriaBuilder.createQuery(BitCoinAccountWallet.class);
         Root<BitCoinAccountWallet> root = criteriaQuery.from(BitCoinAccountWallet.class);
         criteriaQuery.select(root);
-        if(bitCoinAccountId==null|| userId==null){
-            return new BitCoinAccountWallet();
-        }
         Predicate restrictions = criteriaBuilder.conjunction();
         restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("bitCoinAccountId"), bitCoinAccountId));
         restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("userId"), userId));
@@ -35,7 +32,7 @@ public class BitCoinAccountWalletDaoImpl extends BaseDaoImpl<BitCoinAccountWalle
         try{
             return super.findList(criteriaQuery, null, null, null, null).get(0);
         }catch (Exception e){
-            return new BitCoinAccountWallet();
+            return null;
         }
     }
 }

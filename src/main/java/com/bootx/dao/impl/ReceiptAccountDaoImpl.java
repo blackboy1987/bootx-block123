@@ -39,4 +39,18 @@ public class ReceiptAccountDaoImpl extends BaseDaoImpl<ReceiptAccount, Long> imp
         return super.findList(criteriaQuery);
     }
 
+    @Override
+    public List<ReceiptAccount> findListByUserId(Long userId) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ReceiptAccount> criteriaQuery = criteriaBuilder.createQuery(ReceiptAccount.class);
+        Root<ReceiptAccount> root = criteriaQuery.from(ReceiptAccount.class);
+        criteriaQuery.select(root);
+        Predicate restrictions = criteriaBuilder.conjunction();
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("userId"), userId));
+        criteriaQuery.where(restrictions);
+        return super.findList(criteriaQuery);
+    }
 }

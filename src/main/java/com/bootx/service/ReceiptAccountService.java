@@ -14,4 +14,5 @@ import java.util.List;
 public interface ReceiptAccountService extends BaseService<ReceiptAccount, Long> {
     List<ReceiptAccount> findList(Long userId, Integer type);
 
+    List<ReceiptAccount> findListByUserId(Long id);
 }
