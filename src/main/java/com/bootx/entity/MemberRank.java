@@ -3,7 +3,6 @@ package com.bootx.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -52,6 +52,13 @@ public class MemberRank extends BaseEntity<Long> {
 	@Digits(integer = 12, fraction = 3)
 	@Column(precision = 21, scale = 6)
 	private BigDecimal amount;
+
+	/**
+	 * 团队矿机数
+	 */
+	@Min(0)
+	@Column(nullable = false,unique = true)
+	private Integer mineMachineCount;
 
 	/**
 	 * 是否默认
@@ -129,6 +136,14 @@ public class MemberRank extends BaseEntity<Long> {
 	 */
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public Integer getMineMachineCount() {
+		return mineMachineCount;
+	}
+
+	public void setMineMachineCount(Integer mineMachineCount) {
+		this.mineMachineCount = mineMachineCount;
 	}
 
 	/**

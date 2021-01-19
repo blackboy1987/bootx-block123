@@ -31,6 +31,11 @@ public class Member extends User {
 	public static final Integer EXTENDCODE_LENGTH = 8;
 
 	/**
+	 * 树路径分隔符
+	 */
+	public static final String TREE_PATH_SEPARATOR = ",";
+
+	/**
 	 * 权限
 	 */
 	public static final Set<String> PERMISSIONS = Collections.singleton("member");
@@ -360,6 +365,58 @@ public class Member extends User {
 	@Transient
 	@JsonView({PageView.class})
 	private List<BitCoinAccount> bitCoinAccounts = new ArrayList<>();
+
+	/**
+	 * 树路径
+	 */
+	@Column(nullable = false)
+	private String treePath;
+
+	/**
+	 * 层级
+	 */
+	@Column(nullable = false)
+	private Integer grade;
+
+	/**
+	 * 获取树路径
+	 *
+	 * @return 树路径
+	 */
+	public String getTreePath() {
+		return treePath;
+	}
+
+	/**
+	 * 设置树路径
+	 *
+	 * @param treePath
+	 *            树路径
+	 */
+	public void setTreePath(String treePath) {
+		this.treePath = treePath;
+	}
+
+	/**
+	 * 获取层级
+	 *
+	 * @return 层级
+	 */
+	public Integer getGrade() {
+		return grade;
+	}
+
+	/**
+	 * 设置层级
+	 *
+	 * @param grade
+	 *            层级
+	 */
+	public void setGrade(Integer grade) {
+		this.grade = grade;
+	}
+
+
 
 	/**
 	 * 获取用户名
@@ -1262,6 +1319,52 @@ public class Member extends User {
 	public void preUpdate() {
 		setEmail(StringUtils.lowerCase(getEmail()));
 		setMobile(StringUtils.lowerCase(getMobile()));
+	}
+
+	/**
+	 * 获取所有上级分类ID
+	 *
+	 * @return 所有上级分类ID
+	 */
+	@Transient
+	public Long[] getParentIds() {
+		String[] parentIds = StringUtils.split(getTreePath(), TREE_PATH_SEPARATOR);
+		Long[] result = new Long[parentIds.length];
+		for (int i = 0; i < parentIds.length; i++) {
+			result[i] = Long.valueOf(parentIds[i]);
+		}
+		return result;
+	}
+
+	/**
+	 * 获取所有上级分类
+	 *
+	 * @return 所有上级分类
+	 */
+	@Transient
+	public List<Member> getParents() {
+		List<Member> parents = new ArrayList<>();
+		recursiveParents(parents, this);
+		return parents;
+	}
+
+	/**
+	 * 递归上级分类
+	 *
+	 * @param parents
+	 *            上级分类
+	 * @param member
+	 *            文章分类
+	 */
+	private void recursiveParents(List<Member> parents, Member member) {
+		if (member == null) {
+			return;
+		}
+		Member parent = member.getParent();
+		if (parent != null) {
+			parents.add(0, parent);
+			recursiveParents(parents, parent);
+		}
 	}
 
 }

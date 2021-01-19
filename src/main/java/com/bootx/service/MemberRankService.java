@@ -48,4 +48,5 @@ public interface MemberRankService extends BaseService<MemberRank, Long> {
 	 */
 	MemberRank findByAmount(BigDecimal amount);
 
+    MemberRank getLastest(Long orderCount);
 }

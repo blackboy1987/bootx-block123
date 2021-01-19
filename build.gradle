@@ -52,6 +52,7 @@ dependencies {
     compile group: 'com.aliyun', name: 'aliyun-java-sdk-core', version: '4.5.17'
     compile group: 'com.aliyun', name: 'aliyun-java-sdk-sts', version: '3.0.2'
     compile 'com.aliyun.oss:aliyun-sdk-oss:3.10.2'
+    compile group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '4.11.21.ALL'
 
     dependencies { compile fileTree(dir:'libs',include:['*.jar'])}
 

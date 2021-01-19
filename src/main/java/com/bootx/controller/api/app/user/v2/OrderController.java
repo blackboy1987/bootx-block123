@@ -11,9 +11,11 @@ import com.bootx.common.Pageable;
 import com.bootx.common.Result;
 import com.bootx.controller.admin.BaseController;
 import com.bootx.entity.Member;
+import com.bootx.entity.MemberRank;
 import com.bootx.entity.MineMachineOrder;
 import com.bootx.security.CurrentUser;
 import com.bootx.service.BitCoinAccountService;
+import com.bootx.service.MemberRankService;
 import com.bootx.service.MemberService;
 import com.bootx.service.MineMachineOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -31,13 +34,14 @@ import java.util.Map;
 @RequestMapping("/app/user/v2/order")
 public class OrderController extends BaseController {
 
-    @Autowired
+    @Resource
     private MemberService memberService;
-    @Autowired
+    @Resource
     private MineMachineOrderService mineMachineOrderService;
-
-    @Autowired
+    @Resource
     private BitCoinAccountService bitCoinAccountService;
+    @Resource
+    private MemberRankService memberRankService;
 
 
     @PostMapping("/page")
@@ -218,6 +222,17 @@ public class OrderController extends BaseController {
         }
         mineMachineOrder.setPayType(payType);
         mineMachineOrderService.update(mineMachineOrder);
+        // 更新推荐人的会员等级
+        Member parent = member.getParent();
+        if(parent!=null){
+            Long orderCount = mineMachineOrderService.countTeam(parent);
+            MemberRank memberRank = memberRankService.getLastest(orderCount);
+            if(memberRank!=null){
+                parent.setMemberRank(memberRank);
+                memberService.update(member);
+            }
+        }
+
 
         return Result.success("ok");
     }

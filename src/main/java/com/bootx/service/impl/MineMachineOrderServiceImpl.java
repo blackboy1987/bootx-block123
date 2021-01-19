@@ -69,4 +69,20 @@ public class MineMachineOrderServiceImpl extends BaseServiceImpl<MineMachineOrde
     public Page<MineMachineOrder> findPage(Pageable pageable, Member member, Integer excision, String orderType, String coinType) {
         return mineMachineOrderDao.findPage(pageable, member, excision, orderType, coinType);
     }
+
+    @Override
+    public Long count(Member member) {
+        if(member==null){
+            return 0L;
+        }
+        return jdbcTemplate.queryForObject("select count(id) from minemachineorder where userId= "+member.getId()+" and ( state=2 or state=3)", Long.class);
+    }
+
+    @Override
+    public Long countTeam(Member member) {
+        if(member==null){
+            return 0L;
+        }
+        return jdbcTemplate.queryForObject("select * from minemachineorder where userId in (select id from member where parent_id="+member.getId()+") and (state=2 or state=3)", Long.class);
+    }
 }

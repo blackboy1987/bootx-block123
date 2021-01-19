@@ -43,6 +43,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
      * 4：已取消
      * 5：退款中
      * 6：已退款
+     * 7: 已过期
      * 其他：已取消
      */
     @JsonView({PageView.class})

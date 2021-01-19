@@ -18,4 +18,9 @@ public interface MineMachineOrderService extends BaseService<MineMachineOrder, L
     MineMachineOrder create(Member member, MineMachine mineMachine, Integer quantity, Integer day, Integer excision,Integer orderType);
 
     Page<MineMachineOrder> findPage(Pageable pageable, Member member, Integer excision, String orderType, String coinType);
+
+    Long count(Member member);
+
+    Long countTeam(Member member);
+
 }

@@ -15,12 +15,14 @@ import com.bootx.util.CodeUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.LockModeType;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -279,6 +281,45 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 		smsService.sendRegisterMemberSms(pMember);
 		return pMember;
 	}
+
+	@Override
+	@Transactional
+	public Member update(Member member) {
+		Assert.notNull(member, "[Assertion failed] - articleCategory is required; it must not be null");
+
+		setValue(member);
+		for (Member children : memberDao.findChildren(member, true, null)) {
+			setValue(children);
+		}
+		return super.update(member);
+	}
+
+	@Override
+	@Transactional
+	public Member update(Member member, String... ignoreProperties) {
+		return super.update(member, ignoreProperties);
+	}
+
+	/**
+	 * 设置值
+	 *
+	 * @param member
+	 *            文章分类
+	 */
+	private void setValue(Member member) {
+		if (member == null) {
+			return;
+		}
+		Member parent = member.getParent();
+		if (parent != null) {
+			member.setTreePath(parent.getTreePath() + parent.getId() + ArticleCategory.TREE_PATH_SEPARATOR);
+		} else {
+			member.setTreePath(ArticleCategory.TREE_PATH_SEPARATOR);
+		}
+		member.setGrade(member.getParentIds().length);
+	}
+
+
 
 	@Override
 	@Transactional(readOnly = true)

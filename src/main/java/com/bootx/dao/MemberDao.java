@@ -3,6 +3,7 @@ package com.bootx.dao;
 
 import com.bootx.common.Page;
 import com.bootx.common.Pageable;
+import com.bootx.entity.ArticleCategory;
 import com.bootx.entity.Member;
 import com.bootx.entity.MemberAttribute;
 
@@ -77,4 +78,41 @@ public interface MemberDao extends BaseDao<Member, Long> {
 	BigDecimal frozenTotalAmount();
 
 	Page<Member> findPage(Pageable pageable, String username, String name, Date beginDate, Date endDate);
+
+	/**
+	 * 查找顶级文章分类
+	 *
+	 * @param count
+	 *            数量
+	 * @return 顶级文章分类
+	 */
+	List<Member> findRoots(Integer count);
+
+	/**
+	 * 查找上级文章分类
+	 *
+	 * @param member
+	 *            文章分类
+	 * @param recursive
+	 *            是否递归
+	 * @param count
+	 *            数量
+	 * @return 上级文章分类
+	 */
+	List<Member> findParents(Member member, boolean recursive, Integer count);
+
+	/**
+	 * 查找下级文章分类
+	 *
+	 * @param member
+	 *            文章分类
+	 * @param recursive
+	 *            是否递归
+	 * @param count
+	 *            数量
+	 * @return 下级文章分类
+	 */
+	List<Member> findChildren(Member member, boolean recursive, Integer count);
+
+
 }

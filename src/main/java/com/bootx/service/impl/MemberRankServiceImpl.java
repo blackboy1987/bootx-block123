@@ -4,6 +4,7 @@ package com.bootx.service.impl;
 import com.bootx.dao.MemberRankDao;
 import com.bootx.entity.MemberRank;
 import com.bootx.service.MemberRankService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Service - 会员等级
@@ -46,6 +48,22 @@ public class MemberRankServiceImpl extends BaseServiceImpl<MemberRank, Long> imp
 	@Transactional(readOnly = true)
 	public MemberRank findByAmount(BigDecimal amount) {
 		return memberRankDao.findByAmount(amount);
+	}
+
+	@Override
+	public MemberRank getLastest(Long orderCount) {
+		if(orderCount==null){
+			orderCount = 0L;
+		}
+		try {
+			Map<String,Object> map = jdbcTemplate.queryForMap("select id,mineMachineCount from memberrank where mineMachineCount<55 order by mineMachineCount desc limit 1",new TypeReference<Map<String,Object>>(){
+
+			});
+			return find(Long.valueOf(map.get("id")+""));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
