@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.math.BigDecimal;
 
 /**
@@ -60,12 +62,20 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private Integer invest;
+
+
     /**
-     * 算力
+     * 算力(每日产出)
      */
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
     private BigDecimal profit;
+
+    /**
+     * 每小时的算力(每小时产出)
+     */
+    @Column(precision = 27, scale = 12)
+    private BigDecimal dayProfit;
     /**
      * rmb电费价格
      */
@@ -95,8 +105,9 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private Integer manageDiscount;
+
     /**
-     *
+     * 每年算力
      */
     @JsonView({PageView.class})
     private Integer profitYear;
@@ -131,6 +142,7 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private Integer monthSales;
+
     /**
      *
      */
@@ -248,6 +260,7 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private String hierarchy;
+
     /**
      * 用什么币才能购买
      */
@@ -343,6 +356,14 @@ public class MineMachine extends BaseEntity<Long> {
 
     public void setProfit(BigDecimal profit) {
         this.profit = profit;
+    }
+
+    public BigDecimal getDayProfit() {
+        return dayProfit;
+    }
+
+    public void setDayProfit(BigDecimal dayProfit) {
+        this.dayProfit = dayProfit;
     }
 
     public BigDecimal getRmbElectricPrice() {
@@ -648,6 +669,22 @@ public class MineMachine extends BaseEntity<Long> {
 
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    @PrePersist
+    public void preSave(){
+        if(profit==null){
+            profit = BigDecimal.ZERO;
+            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING);
+        }
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        if(profit==null){
+            profit = BigDecimal.ZERO;
+            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING);
+        }
     }
 
 }

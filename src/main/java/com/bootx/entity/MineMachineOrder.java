@@ -1,9 +1,10 @@
 package com.bootx.entity;
-
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,25 +14,69 @@ import java.util.Date;
 @Entity
 public class MineMachineOrder extends BaseEntity<Long>{
 
+
+    /**
+     *
+     */
     private Long creator;
+
+    /**
+     *
+     */
     private Long modifier;
+
+    /**
+     * 购买人的id
+     */
     @JsonView({PageView.class})
     private Long userId;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private Integer productType;
+
+    /**
+     * 矿机id
+     */
     private Long productId;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
     private BigDecimal price;
+
+    /**
+     *
+     */
     private Integer invest;
+
+    /**
+     * 购买的数量
+     */
     @JsonView({PageView.class})
     private Integer quantity;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
     private BigDecimal amount;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
     private BigDecimal discount;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String memo;
     /**
@@ -48,68 +93,269 @@ public class MineMachineOrder extends BaseEntity<Long>{
      */
     @JsonView({PageView.class})
     private Integer state;
+
+    /**
+     * 支付方式。目前只有CNY支付
+     * 支付宝：1，
+     * 银行卡：2
+     * CNY:3
+     */
     private Integer payType;
+
+    /**
+     * 付款的费用
+     */
     private String payPrice;
+
+    /**
+     *
+     */
     private String terminationDate;
+
+    /**
+     *
+     */
     private Integer twelveSmstag;
+
+    /**
+     *
+     */
     private Integer oneSmstag;
+
+    /**
+     *
+     */
     private Integer earnest;
+
+    /**
+     *
+     */
     private Integer balancePayment;
+
+    /**
+     *
+     */
     private String returnMoney;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private Integer electricType;
+
+    /**
+     * 购买天数
+     */
     @JsonView({PageView.class})
     private Integer day;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
+
+    /**
+     *
+     */
     private BigDecimal addElectric;
     @Column(precision = 27, scale = 12)
+
+    /**
+     *
+     */
     private BigDecimal electricMoney;
     @JsonView({PageView.class})
+
+    /**
+     * 购买的费用
+     */
     @Column(precision = 27, scale = 12)
     private BigDecimal rmbPrice;
+
+    /**
+     * 支付的币种
+     */
     @JsonView({PageView.class})
     private Integer coinType;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String fromChannel;
+
+    /**
+     *
+     */
     private String electric;
+
+    /**
+     * 过期时间（多久未支付就过期）
+     */
     private Date expirationDate;
+
+    /**
+     * 第一次产生收益的时间
+     */
     private String comeDate;
+
+    /**
+     * 到期时间。（购买天数到了之后到期）
+     */
     private String expireDate;
+
+
+    /**
+     *
+     */
     private String investTime;
+
+    /**
+     * 订单编号
+     */
     @JsonView({PageView.class})
     private String sn;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String userName;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String phone;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String name;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String productName;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String productIcon;
+
+    /**
+     *
+     */
     @JsonView({PageView.class})
     private String productManage;
+
+    /**
+     *
+     */
     private String manage;
+
+    /**
+     *
+     */
     private String productManageDiscount;
+
+    /**
+     *
+     */
     private String productElectric;
+
+    /**
+     *
+     */
     private String rmbElectricPrice;
+
+    /**
+     *
+     */
     private String saleType;
+
+    /**
+     *
+     */
     private String productValidity;
+
+    /**
+     *
+     */
     private String profitUsdt;
+
+    /**
+     *
+     */
     private String child;
+
+    /**
+     *
+     */
     private Date today;
+
+    /**
+     *
+     */
     private String shopCode;
+
+    /**
+     *
+     */
     private String electricDiscount;
-    private String profit;
+
+    /**
+     * 每天的算力(每天产出)
+     */
+    private BigDecimal profit;
+    /**
+     * 每小时的算力(每小时产出)
+     */
+    @Column(precision = 27, scale = 12)
+    private BigDecimal dayProfit;
+
+    /**
+     *
+     */
     private String isReward;
+
+    /**
+     *
+     */
     private String btcDiscount;
+
+    /**
+     *
+     */
     private String hbtDiscount;
+
+    /**
+     *
+     */
     private String electricDicountMd5Format;
+
+    /**
+     *
+     */
     private String encapsulationDay;
+
+    /**
+     *
+     */
     private String reward;
+
+    /**
+     *
+     */
     private Integer orderType;
+
+    /**
+     *
+     */
     private Integer excision;
 
     public Long getCreator() {
@@ -512,12 +758,48 @@ public class MineMachineOrder extends BaseEntity<Long>{
         this.electricDiscount = electricDiscount;
     }
 
-    public String getProfit() {
+    public void setTwelveSmstag(Integer twelveSmstag) {
+        this.twelveSmstag = twelveSmstag;
+    }
+
+    public void setOneSmstag(Integer oneSmstag) {
+        this.oneSmstag = oneSmstag;
+    }
+
+    public void setEarnest(Integer earnest) {
+        this.earnest = earnest;
+    }
+
+    public void setBalancePayment(Integer balancePayment) {
+        this.balancePayment = balancePayment;
+    }
+
+    public void setElectricType(Integer electricType) {
+        this.electricType = electricType;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
+    }
+
+    public void setCoinType(Integer coinType) {
+        this.coinType = coinType;
+    }
+
+    public BigDecimal getProfit() {
         return profit;
     }
 
-    public void setProfit(String profit) {
+    public void setProfit(BigDecimal profit) {
         this.profit = profit;
+    }
+
+    public BigDecimal getDayProfit() {
+        return dayProfit;
+    }
+
+    public void setDayProfit(BigDecimal dayProfit) {
+        this.dayProfit = dayProfit;
     }
 
     public String getIsReward() {
@@ -584,38 +866,88 @@ public class MineMachineOrder extends BaseEntity<Long>{
         this.excision = excision;
     }
 
+    @PrePersist
+    public void preSave(){
+        if(profit==null){
+            profit = BigDecimal.ZERO;
+            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING).multiply(new BigDecimal(quantity));
+        }
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        if(profit==null){
+            profit = BigDecimal.ZERO;
+            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING).multiply(new BigDecimal(quantity));
+        }
+    }
+
     public void init(){
         setCreator(0L);
         setModifier(0L);
-        setInvest(1);
-        setDiscount(BigDecimal.ZERO);
-        setTerminationDate(null);
+        setUserId(0L);
+        setProductType(0);
+        setProductId(0L);
+        setPrice(new BigDecimal("0"));
+        setInvest(0);
+        setQuantity(0);
+        setAmount(new BigDecimal("0"));
+        setDiscount(new BigDecimal("0"));
+        setMemo("");
+        setState(0);
+        setPayType(0);
+        setPayPrice("");
+        setTerminationDate("");
         setTwelveSmstag(0);
         setOneSmstag(0);
         setEarnest(0);
         setBalancePayment(0);
-        setReturnMoney(null);
-        setElectric(null);
-        setComeDate(null);
-        setExpireDate(null);
-        setManage(null);
-        setProductManageDiscount(null);
-        setProductElectric(null);
-        setRmbElectricPrice(null);
-        setSaleType(null);
-        setProductValidity(null);
-        setProfitUsdt(null);
-        setChild(null);
+        setReturnMoney("");
+        setElectricType(0);
+        setDay(0);
+        setAddElectric(new BigDecimal("0"));
+        setElectricMoney(new BigDecimal("0"));
+        setRmbPrice(new BigDecimal("0"));
+        setCoinType(0);
+        setFromChannel("");
+        setElectric("");
+        setExpirationDate(new Date());
+        setComeDate("");
+        setExpireDate("");
+        setInvestTime("");
+        setSn("");
+        setUserName("");
+        setPhone("");
+        setName("");
+        setProductName("");
+        setProductIcon("");
+        setProductManage("");
+        setManage("");
+        setProductManageDiscount("");
+        setProductElectric("");
+        setRmbElectricPrice("");
+        setSaleType("");
+        setProductValidity("");
+        setProfitUsdt("");
+        setChild("");
         setToday(new Date());
-        setShopCode(null);
-        setElectricDiscount(null);
-        setProfit(null);
-        setIsReward(null);
-        setBtcDiscount(null);
-        setHbtDiscount(null);
-        setElectricDicountMd5Format(null);
-        setEncapsulationDay(null);
-        setReward(null);
+        setShopCode("");
+        setElectricDiscount("");
+        setTwelveSmstag(0);
+        setOneSmstag(0);
+        setEarnest(0);
+        setBalancePayment(0);
+        setElectricType(0);
+        setDay(0);
+        setCoinType(0);
+        setProfit(new BigDecimal("0"));
+        setDayProfit(new BigDecimal("0"));
+        setIsReward("");
+        setBtcDiscount("");
+        setHbtDiscount("");
+        setElectricDicountMd5Format("");
+        setEncapsulationDay("");
+        setReward("");
         setOrderType(0);
         setExcision(0);
     }

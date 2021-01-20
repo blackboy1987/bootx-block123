@@ -15,7 +15,7 @@ import com.bootx.entity.MineMachineOrder;
  */
 public interface MineMachineOrderService extends BaseService<MineMachineOrder, Long> {
 
-    MineMachineOrder create(Member member, MineMachine mineMachine, Integer quantity, Integer day, Integer excision,Integer orderType);
+    MineMachineOrder create(Member member, MineMachine mineMachine, Integer quantity, Integer day, Integer excision,Integer orderType,String memo);
 
     Page<MineMachineOrder> findPage(Pageable pageable, Member member, Integer excision, String orderType, String coinType);
 

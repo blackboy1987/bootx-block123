@@ -123,7 +123,7 @@ public class AuthController {
         // 赠送免费的矿机
         MineMachine mineMachine = mineMachineService.findDefault();
         if(mineMachine!=null){
-            mineMachineOrderService.create(member,mineMachine,1,30,null,null);
+            mineMachineOrderService.create(member,mineMachine,1,30,null,null,"系统赠送");
         }
 
         return Result.success("");

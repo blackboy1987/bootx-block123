@@ -31,7 +31,7 @@ public class MineMachineOrderServiceImpl extends BaseServiceImpl<MineMachineOrde
     private MineMachineOrderDao mineMachineOrderDao;
 
     @Override
-    public MineMachineOrder create(Member member, MineMachine mineMachine, Integer quantity, Integer day, Integer excision,Integer orderType) {
+    public MineMachineOrder create(Member member, MineMachine mineMachine, Integer quantity, Integer day, Integer excision,Integer orderType,String memo) {
         MineMachineOrder mineMachineOrder = new MineMachineOrder();
         mineMachineOrder.init();
         mineMachineOrder.setUserId(member.getId());
@@ -40,7 +40,7 @@ public class MineMachineOrderServiceImpl extends BaseServiceImpl<MineMachineOrde
         mineMachineOrder.setPrice(mineMachine.getPrice());
         mineMachineOrder.setAmount(mineMachine.getPrice().multiply(new BigDecimal(quantity)));
         mineMachineOrder.setQuantity(quantity);
-        mineMachineOrder.setMemo("系统赠送");
+        mineMachineOrder.setMemo(memo);
         mineMachineOrder.setState(0);
         mineMachineOrder.setPayType(3);
         mineMachineOrder.setElectricType(1);
