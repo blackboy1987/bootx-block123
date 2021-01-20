@@ -1,4 +1,4 @@
-package com.bootx.controller.api;
+package com.bootx.controller.api.app;
 
 import com.bootx.common.Result;
 import com.bootx.controller.admin.BaseController;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("//app/prize")
+@RequestMapping("/app/prize")
 public class PrizeController extends BaseController {
 
     @Autowired

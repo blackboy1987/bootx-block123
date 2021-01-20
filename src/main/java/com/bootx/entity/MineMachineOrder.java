@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -316,7 +317,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
      * 每小时的算力(每小时产出)
      */
     @Column(precision = 27, scale = 12)
-    private BigDecimal dayProfit;
+    private BigDecimal hourProfit;
 
     /**
      *
@@ -794,12 +795,12 @@ public class MineMachineOrder extends BaseEntity<Long>{
         this.profit = profit;
     }
 
-    public BigDecimal getDayProfit() {
-        return dayProfit;
+    public BigDecimal getHourProfit() {
+        return hourProfit;
     }
 
-    public void setDayProfit(BigDecimal dayProfit) {
-        this.dayProfit = dayProfit;
+    public void setHourProfit(BigDecimal hourProfit) {
+        this.hourProfit = hourProfit;
     }
 
     public String getIsReward() {
@@ -870,7 +871,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
     public void preSave(){
         if(profit==null){
             profit = BigDecimal.ZERO;
-            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING).multiply(new BigDecimal(quantity));
+            hourProfit = profit.divide(new BigDecimal(24),10, RoundingMode.CEILING).multiply(new BigDecimal(quantity));
         }
     }
 
@@ -878,7 +879,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
     public void preUpdate(){
         if(profit==null){
             profit = BigDecimal.ZERO;
-            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING).multiply(new BigDecimal(quantity));
+            hourProfit = profit.divide(new BigDecimal(24),10,RoundingMode.CEILING).multiply(new BigDecimal(quantity));
         }
     }
 
@@ -941,7 +942,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
         setDay(0);
         setCoinType(0);
         setProfit(new BigDecimal("0"));
-        setDayProfit(new BigDecimal("0"));
+        setHourProfit(new BigDecimal("0"));
         setIsReward("");
         setBtcDiscount("");
         setHbtDiscount("");

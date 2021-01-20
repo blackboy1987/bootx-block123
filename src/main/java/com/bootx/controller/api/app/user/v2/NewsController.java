@@ -1,4 +1,4 @@
-package com.bootx.controller.api;
+package com.bootx.controller.api.app.user.v2;
 
 import com.bootx.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;

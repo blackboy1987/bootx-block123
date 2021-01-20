@@ -1,4 +1,4 @@
-package com.bootx.controller.api;
+package com.bootx.controller.api.common;
 
 
 import com.bootx.common.Result;

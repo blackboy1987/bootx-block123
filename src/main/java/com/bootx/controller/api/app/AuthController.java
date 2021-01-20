@@ -1,4 +1,4 @@
-package com.bootx.controller.api;
+package com.bootx.controller.api.app;
 
 import com.bootx.common.Result;
 import com.bootx.entity.Member;

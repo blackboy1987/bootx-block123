@@ -10,10 +10,12 @@ import com.bootx.entity.MineMachineOrder;
 import com.bootx.entity.Sn;
 import com.bootx.service.MineMachineOrderService;
 import com.bootx.service.SnService;
+import com.bootx.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -51,7 +53,7 @@ public class MineMachineOrderServiceImpl extends BaseServiceImpl<MineMachineOrde
         mineMachineOrder.setPayPrice(mineMachine.getRmbPrice()+" 元");
         mineMachineOrder.setCoinType(mineMachine.getCoinType());
         mineMachineOrder.setFromChannel("APP");
-        mineMachineOrder.setExpirationDate(new Date());
+        mineMachineOrder.setExpirationDate(DateUtils.getNextDay(mineMachineOrder.getDay()));
         mineMachineOrder.setInvestTime("2021-01-01 00:00:00");
         mineMachineOrder.setSn(snService.generate(Sn.Type.ORDER));
         mineMachineOrder.setUserName(member.getUsername());
@@ -62,6 +64,8 @@ public class MineMachineOrderServiceImpl extends BaseServiceImpl<MineMachineOrde
         mineMachineOrder.setProductIcon(mineMachine.getIcon());
         mineMachineOrder.setExcision(excision);
         mineMachineOrder.setOrderType(orderType);
+        mineMachineOrder.setProfit(mineMachine.getProfit().multiply(new BigDecimal(quantity)));
+        mineMachineOrder.setHourProfit(mineMachineOrder.getProfit().divide(new BigDecimal(24),12, RoundingMode.HALF_DOWN));
         return super.save(mineMachineOrder);
     }
 

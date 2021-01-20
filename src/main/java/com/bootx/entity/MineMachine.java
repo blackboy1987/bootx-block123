@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * 矿机
@@ -75,7 +76,7 @@ public class MineMachine extends BaseEntity<Long> {
      * 每小时的算力(每小时产出)
      */
     @Column(precision = 27, scale = 12)
-    private BigDecimal dayProfit;
+    private BigDecimal hourProfit;
     /**
      * rmb电费价格
      */
@@ -358,12 +359,12 @@ public class MineMachine extends BaseEntity<Long> {
         this.profit = profit;
     }
 
-    public BigDecimal getDayProfit() {
-        return dayProfit;
+    public BigDecimal getHourProfit() {
+        return hourProfit;
     }
 
-    public void setDayProfit(BigDecimal dayProfit) {
-        this.dayProfit = dayProfit;
+    public void setHourProfit(BigDecimal hourProfit) {
+        this.hourProfit = hourProfit;
     }
 
     public BigDecimal getRmbElectricPrice() {
@@ -675,7 +676,7 @@ public class MineMachine extends BaseEntity<Long> {
     public void preSave(){
         if(profit==null){
             profit = BigDecimal.ZERO;
-            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING);
+            hourProfit = profit.divide(new BigDecimal(24),10, RoundingMode.CEILING);
         }
     }
 
@@ -683,7 +684,7 @@ public class MineMachine extends BaseEntity<Long> {
     public void preUpdate(){
         if(profit==null){
             profit = BigDecimal.ZERO;
-            dayProfit = profit.divide(new BigDecimal(24),10,BigDecimal.ROUND_CEILING);
+            hourProfit = profit.divide(new BigDecimal(24),10,RoundingMode.CEILING);
         }
     }
 

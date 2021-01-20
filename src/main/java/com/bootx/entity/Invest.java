@@ -63,6 +63,8 @@ public class Invest extends BaseEntity<Long>{
 
     private Long validity;
 
+    private Long orderId;
+
     @Column(precision = 27, scale = 12)
     private BigDecimal allBtcPrice;
 
@@ -442,5 +444,13 @@ public class Invest extends BaseEntity<Long>{
 
     public void setExcision(Integer excision) {
         this.excision = excision;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }
