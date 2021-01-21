@@ -6,11 +6,15 @@ import com.bootx.dao.InvestDao;
 import com.bootx.entity.Invest;
 import com.bootx.entity.Member;
 import com.bootx.entity.MineMachine;
+import com.bootx.entity.MineMachineOrder;
+import com.bootx.eth.service.EthAdminService;
 import com.bootx.service.InvestService;
+import com.bootx.service.MemberService;
 import com.bootx.service.MineMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +28,14 @@ import java.util.List;
 @Service
 public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements InvestService {
 
-    @Autowired
+    @Resource
     private InvestDao investDao;
-    @Autowired
+    @Resource
     private MineMachineService mineMachineService;
-
+    @Resource
+    private EthAdminService ethAdminService;
+    @Resource
+    private MemberService memberService;
 
     @Override
     public List<Invest> findListByCoinType(Member member, Integer coinType) {
@@ -51,55 +58,53 @@ public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements 
     }
 
     @Override
-    public void create(Member member, MineMachine mineMachine, Integer type, Integer excision) {
+    public void create(Member member, MineMachineOrder mineMachineOrder,String memo) {
         Invest invest = new Invest();
-        if(mineMachine!=null){
-            invest.setProductId(mineMachine.getId());
-            invest.setProductName(mineMachine.getName());
-        }else{
-            invest.setProductId(0L);
-            invest.setProductName("系统");
-        }
-
-        invest.setInvest(new BigDecimal("0.001"));
-        invest.setFrozenInvest(new BigDecimal("0"));
-        invest.setFrozenInvestTemp(new BigDecimal("0"));
-        invest.setAllBtc(new BigDecimal("3.2"));
-        invest.setAllHpt(new BigDecimal("4.5"));
-        invest.setAllEth(new BigDecimal("2.3"));
-        invest.setLastEth(new BigDecimal("1.5"));
-        invest.setLastBtc(new BigDecimal("2.3"));
-        invest.setLastHpt(new BigDecimal("5.5"));
-        invest.setLastTime(new Date());
-        invest.setFrozenTime(new Date());
+        invest.setInvest(mineMachineOrder.getHourProfit());
         invest.setInvestTime(new Date());
-        invest.setReturnMoney(new BigDecimal("0"));
-        invest.setReturnDays(0);
-        invest.setIsExpire(false);
-        invest.setValidity(0L);
-        invest.setAllBtcPrice(new BigDecimal("0.3"));
-        invest.setAllHptPrice(new BigDecimal("0.4"));
-        invest.setLastBtcPrice(new BigDecimal("0.05"));
-        invest.setLastHptPrice(new BigDecimal("0.005"));
-        invest.setAllEthPrice(new BigDecimal("0.3"));
-        invest.setLastEthPrice(new BigDecimal("0.002"));
-        invest.setType(type);
-        invest.setProfit(new BigDecimal("0"));
-        invest.setProfitYear(0L);
-        invest.setElectric(new BigDecimal("1.5"));
-        invest.setElectricDiscount(new BigDecimal("2.3"));
-        invest.setManage(new BigDecimal("2.2"));
-        invest.setManageDiscount(new BigDecimal("1.5"));
-        invest.setBtcDiscount(new BigDecimal("3.8"));
-        invest.setHbtDiscount(new BigDecimal("4.5"));
-        invest.setExpireDate(new Date());
+        invest.setCoinType(mineMachineOrder.getCoinType());
+        invest.setExcision(0);
+        invest.setAllBtc(BigDecimal.ZERO);
+        invest.setAllBtcPrice(BigDecimal.ZERO);
+        invest.setAllEth(BigDecimal.ZERO);
+        invest.setAllEthPrice(BigDecimal.ZERO);
+        invest.setAllHpt(BigDecimal.ZERO);
+        invest.setAllHptPrice(BigDecimal.ZERO);
+        invest.setBtcDiscount(BigDecimal.ZERO);
         invest.setComeDate(new Date());
+        invest.setExcision(0);
+        invest.setElectric(BigDecimal.ZERO);
         invest.setExpirationDate(new Date());
-        invest.setCoinType(mineMachine.getCoinType());
-        invest.setExcision(excision);
+        invest.setExpireDate(new Date());
+        invest.setFrozenInvest(BigDecimal.ZERO);
+        invest.setFrozenInvestTemp(BigDecimal.ZERO);
+        invest.setFrozenTime(new Date());
+        invest.setHbtDiscount(BigDecimal.ZERO);
+        invest.setIsExpire(false);
+        invest.setLastBtc(BigDecimal.ZERO);
+        invest.setLastBtcPrice(BigDecimal.ZERO);
+        invest.setLastEth(BigDecimal.ZERO);
+        invest.setLastEthPrice(BigDecimal.ZERO);
+        invest.setLastHpt(BigDecimal.ZERO);
+        invest.setLastHptPrice(BigDecimal.ZERO);
+        invest.setLastTime(null);
+        invest.setManage(BigDecimal.ZERO);
+        invest.setManageDiscount(BigDecimal.ZERO);
+        invest.setOrderId(mineMachineOrder.getId());
+        invest.setProductId(mineMachineOrder.getProductId());
+        invest.setProductName(mineMachineOrder.getProductName());
+        invest.setProfit(mineMachineOrder.getHourProfit());
+        invest.setProfitYear(0L);
+        invest.setReturnMoney(BigDecimal.ZERO);
+        invest.setReturnDays(0);
+        invest.setType(0);
         invest.setUserId(member.getId());
-        invest.setUserName(member.getUsername());
+        invest.setUserId(member.getId());
         invest.setPhone(member.getPhone());
+        invest.setUserName(member.getUsername());
+        invest.setValidity(0L);
+        invest.setMemo(memo);
         super.save(invest);
+        ethAdminService.transferEther(memberService.find(1L), member, invest.getInvest());
     }
 }

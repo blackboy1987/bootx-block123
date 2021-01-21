@@ -77,12 +77,14 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @Column(precision = 27, scale = 12)
     private BigDecimal hourProfit;
+
     /**
      * rmb电费价格
      */
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
     private BigDecimal rmbElectricPrice;
+
     /**
      * 电费
      */
@@ -190,11 +192,13 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private String validity;
+
     /**
      * 是否推荐
      */
     @JsonView({PageView.class})
     private Boolean isRecommend;
+
     /**
      * 对应的新闻id
      */
@@ -231,11 +235,7 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private String earnest;
-    /**
-     * 返点
-     */
-    @JsonView({PageView.class})
-    private String returnRate;
+
     /**
      *
      */
@@ -251,11 +251,20 @@ public class MineMachine extends BaseEntity<Long> {
      */
     @JsonView({PageView.class})
     private String maxQouta;
+
     /**
-     *
+     * 是否有奖励（给推荐人，如果有，每次产生收益，推荐人都获得对应的收益）
      */
     @JsonView({PageView.class})
-    private String isReward;
+    private Boolean isReward;
+
+    /**
+     * 返点
+     */
+    @JsonView({PageView.class})
+    @Column(precision = 27, scale = 12)
+    private BigDecimal returnRate;
+
     /**
      *
      */
@@ -600,11 +609,11 @@ public class MineMachine extends BaseEntity<Long> {
         this.earnest = earnest;
     }
 
-    public String getReturnRate() {
+    public BigDecimal getReturnRate() {
         return returnRate;
     }
 
-    public void setReturnRate(String returnRate) {
+    public void setReturnRate(BigDecimal returnRate) {
         this.returnRate = returnRate;
     }
 
@@ -632,11 +641,11 @@ public class MineMachine extends BaseEntity<Long> {
         this.maxQouta = maxQouta;
     }
 
-    public String getIsReward() {
+    public Boolean getIsReward() {
         return isReward;
     }
 
-    public void setIsReward(String isReward) {
+    public void setIsReward(Boolean isReward) {
         this.isReward = isReward;
     }
 

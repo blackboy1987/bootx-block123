@@ -22,5 +22,4 @@ public class MineMachineController extends BaseController {
     public Message page(Pageable pageable){
         return Message.success(mineMachineService.findPage(pageable));
     }
-
 }

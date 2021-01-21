@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.web3j.abi.datatypes.Int;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -89,4 +90,11 @@ public class MemberRankServiceImpl extends BaseServiceImpl<MemberRank, Long> imp
 		return pMemberRank;
 	}
 
+	@Override
+	public Integer countMember(MemberRank memberRank) {
+		if(memberRank==null){
+			return 0;
+		}
+		return jdbcTemplate.queryForObject("select count(1) from member where memberRank_id="+memberRank.getId(), Integer.class);
+	}
 }

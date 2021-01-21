@@ -68,6 +68,8 @@ public class Invest extends BaseEntity<Long>{
 
     private Long orderId;
 
+    private String memo;
+
     @Column(precision = 27, scale = 12)
     private BigDecimal allBtcPrice;
 
@@ -455,5 +457,13 @@ public class Invest extends BaseEntity<Long>{
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 }

@@ -4,10 +4,7 @@ package com.bootx.entity;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -58,6 +55,7 @@ public class MemberRank extends BaseEntity<Long> {
 	 */
 	@Min(0)
 	@Column(nullable = false,unique = true)
+	@JsonView({PageView.class})
 	private Integer mineMachineCount;
 
 	/**
@@ -80,6 +78,10 @@ public class MemberRank extends BaseEntity<Long> {
 	 */
 	@OneToMany(mappedBy = "memberRank", fetch = FetchType.LAZY)
 	private Set<Member> members = new HashSet<>();
+
+	@Transient
+	@JsonView({PageView.class})
+	private Integer memberCount;
 
 	/**
 	 * 获取名称
@@ -203,4 +205,11 @@ public class MemberRank extends BaseEntity<Long> {
 		this.members = members;
 	}
 
+	public Integer getMemberCount() {
+		return memberCount;
+	}
+
+	public void setMemberCount(Integer memberCount) {
+		this.memberCount = memberCount;
+	}
 }

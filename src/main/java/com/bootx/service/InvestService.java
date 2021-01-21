@@ -6,6 +6,7 @@ import com.bootx.common.Pageable;
 import com.bootx.entity.Invest;
 import com.bootx.entity.Member;
 import com.bootx.entity.MineMachine;
+import com.bootx.entity.MineMachineOrder;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,7 +24,7 @@ public interface InvestService extends BaseService<Invest, Long> {
 
     BigDecimal sum(Member member, Integer coinType);
 
-    void create(Member member, MineMachine mineMachine, Integer type, Integer excision);
+    void create(Member member, MineMachineOrder mineMachineOrder,String memo);
 
     Page<Invest> findPage(Pageable pageable, Member member, Integer excision, Long productId, Integer type,Integer coinType, Date beginDate, Date endDate);
     List<Invest> findList1(Member member, Integer excision, Long productId, Integer type,Integer coinType, Date beginDate, Date endDate);

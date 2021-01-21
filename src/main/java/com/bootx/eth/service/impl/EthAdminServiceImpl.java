@@ -3,6 +3,7 @@ package com.bootx.eth.service.impl;
 import com.bootx.entity.Member;
 import com.bootx.eth.service.EthAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
@@ -75,8 +76,11 @@ public class EthAdminServiceImpl implements EthAdminService {
      * @return
      */
     @Override
+    @Async
     public String transferEther(Member from, Member to, BigDecimal amount) {
         BigInteger value = Convert.toWei(amount, Convert.Unit.ETHER).toBigInteger();
+        System.out.println(value);
+        System.out.println(ethGetBalance(from.getAccountId()));
         try{
             geth.personalUnlockAccount(from.getAccountId(),from.getUsername()).send();
             PersonalUnlockAccount send1 = geth.personalUnlockAccount(to.getAccountId(), to.getUsername()).send();
@@ -84,9 +88,16 @@ public class EthAdminServiceImpl implements EthAdminService {
             EthGasPrice send = geth.ethGasPrice().send();
             BigInteger gasPrice = send.getGasPrice();
             EthGetTransactionCount transactionCount = web3j.ethGetTransactionCount(from.getAccountId(), DefaultBlockParameterName.LATEST).send();
-            BigInteger nonce = transactionCount.getTransactionCount();
+            BigInteger nonce;
+            try{
+                nonce = transactionCount.getTransactionCount();
+            }catch (Exception e){
+                e.printStackTrace();
+                nonce = new BigInteger("0x0");
+            }
             Transaction transaction = Transaction.createEtherTransaction(from.getAccountId(),nonce,gasPrice,gasPrice,to.getAccountId(),value);
             EthSendTransaction ethSendTransaction = admin.personalSendTransaction(transaction, from.getUsername()).send();
+            System.out.println(ethSendTransaction.getTransactionHash());
             return ethSendTransaction.getTransactionHash();
         }catch (Exception e){
             e.printStackTrace();
@@ -100,7 +111,6 @@ public class EthAdminServiceImpl implements EthAdminService {
         }
         return "0.00";
     }
-
 
     protected EthTransaction getTransactionState(String hashString) {
         try {

@@ -2,8 +2,10 @@
 package com.bootx.controller.admin;
 
 import com.bootx.common.Message;
+import com.bootx.common.Page;
 import com.bootx.common.Pageable;
 import com.bootx.entity.BaseEntity;
+import com.bootx.entity.Member;
 import com.bootx.entity.MemberRank;
 import com.bootx.service.MemberRankService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -90,7 +92,11 @@ public class MemberRankController extends BaseController {
 	@PostMapping("/page")
 	@JsonView(BaseEntity.PageView.class)
 	public Message list(Pageable pageable) {
-		return Message.success(memberRankService.findPage(pageable));
+		Page<MemberRank> page = memberRankService.findPage(pageable);
+		for (MemberRank memberRank:page.getContent()) {
+			memberRank.setMemberCount(memberRankService.countMember(memberRank));
+		}
+		return Message.success(page);
 	}
 
 	/**

@@ -15,6 +15,7 @@ public class Web3jConfig {
     @Bean
     public Web3j web3j(){
         Web3j web3j = Web3j.build(new HttpService(web3jUrl));
+        System.out.println(web3j);
         return web3j;
     }
 

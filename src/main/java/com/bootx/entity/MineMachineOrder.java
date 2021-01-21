@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -49,11 +50,6 @@ public class MineMachineOrder extends BaseEntity<Long>{
     @JsonView({PageView.class})
     @Column(precision = 27, scale = 12)
     private BigDecimal price;
-
-    /**
-     *
-     */
-    private Integer invest;
 
     /**
      * 购买的数量
@@ -133,10 +129,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
      */
     private Integer balancePayment;
 
-    /**
-     *
-     */
-    private String returnMoney;
+
 
     /**
      *
@@ -206,9 +199,13 @@ public class MineMachineOrder extends BaseEntity<Long>{
      */
     private String expireDate;
 
+    /**
+     * 累计收益
+     */
+    private BigDecimal invest;
 
     /**
-     *
+     * 收益产生的时间（每产生一次收益，更新一次时间）
      */
     private String investTime;
 
@@ -320,9 +317,17 @@ public class MineMachineOrder extends BaseEntity<Long>{
     private BigDecimal hourProfit;
 
     /**
-     *
+     * 是否返点
      */
-    private String isReward;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isReward;
+
+    /**
+     * 返点金额
+     */
+    @Column(precision = 27, scale = 12)
+    private BigDecimal returnMoney;
 
     /**
      *
@@ -407,11 +412,11 @@ public class MineMachineOrder extends BaseEntity<Long>{
         this.price = price;
     }
 
-    public Integer getInvest() {
+    public BigDecimal getInvest() {
         return invest;
     }
 
-    public void setInvest(Integer invest) {
+    public void setInvest(BigDecimal invest) {
         this.invest = invest;
     }
 
@@ -511,11 +516,11 @@ public class MineMachineOrder extends BaseEntity<Long>{
         this.balancePayment = balancePayment;
     }
 
-    public String getReturnMoney() {
+    public BigDecimal getReturnMoney() {
         return returnMoney;
     }
 
-    public void setReturnMoney(String returnMoney) {
+    public void setReturnMoney(BigDecimal returnMoney) {
         this.returnMoney = returnMoney;
     }
 
@@ -803,11 +808,11 @@ public class MineMachineOrder extends BaseEntity<Long>{
         this.hourProfit = hourProfit;
     }
 
-    public String getIsReward() {
+    public Boolean getIsReward() {
         return isReward;
     }
 
-    public void setIsReward(String isReward) {
+    public void setIsReward(Boolean isReward) {
         this.isReward = isReward;
     }
 
@@ -890,7 +895,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
         setProductType(0);
         setProductId(0L);
         setPrice(new BigDecimal("0"));
-        setInvest(0);
+        setInvest(BigDecimal.ZERO);
         setQuantity(0);
         setAmount(new BigDecimal("0"));
         setDiscount(new BigDecimal("0"));
@@ -903,7 +908,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
         setOneSmstag(0);
         setEarnest(0);
         setBalancePayment(0);
-        setReturnMoney("");
+        setReturnMoney(BigDecimal.ZERO);
         setElectricType(0);
         setDay(0);
         setAddElectric(new BigDecimal("0"));
@@ -943,7 +948,7 @@ public class MineMachineOrder extends BaseEntity<Long>{
         setCoinType(0);
         setProfit(new BigDecimal("0"));
         setHourProfit(new BigDecimal("0"));
-        setIsReward("");
+        setIsReward(false);
         setBtcDiscount("");
         setHbtDiscount("");
         setElectricDicountMd5Format("");
