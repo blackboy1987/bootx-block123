@@ -5,13 +5,10 @@ import com.bootx.entity.Member;
 import com.bootx.service.BonusService;
 import com.bootx.service.InvestService;
 import com.bootx.service.MemberService;
-import com.bootx.service.MineMachineOrderService;
-import org.apache.poi.ss.formula.ptg.MemErrPtg;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -79,7 +76,7 @@ public class BonusServiceImpl implements BonusService {
             invest.setLastEthPrice(BigDecimal.ZERO);
             invest.setLastHpt(BigDecimal.ZERO);
             invest.setLastHptPrice(BigDecimal.ZERO);
-            invest.setLastTime(new Date());
+            invest.setLastTime(null);
             invest.setManage(BigDecimal.ZERO);
             invest.setManageDiscount(BigDecimal.ZERO);
             invest.setOrderId(id);

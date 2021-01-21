@@ -44,6 +44,9 @@ public class Invest extends BaseEntity<Long>{
     @Column(precision = 27, scale = 12)
     private BigDecimal lastHpt;
 
+    /**
+     * 到期时间
+     */
     private Date lastTime;
 
     private Date frozenTime;

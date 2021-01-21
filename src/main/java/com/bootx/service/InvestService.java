@@ -7,6 +7,7 @@ import com.bootx.entity.Invest;
 import com.bootx.entity.Member;
 import com.bootx.entity.MineMachine;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import java.util.List;
 public interface InvestService extends BaseService<Invest, Long> {
 
     List<Invest> findListByCoinType(Member member, Integer coinType);
+
+    BigDecimal sum(Member member, Integer coinType);
 
     void create(Member member, MineMachine mineMachine, Integer type, Integer excision);
 

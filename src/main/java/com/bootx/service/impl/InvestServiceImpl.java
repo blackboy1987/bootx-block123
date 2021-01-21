@@ -32,8 +32,12 @@ public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements 
 
     @Override
     public List<Invest> findListByCoinType(Member member, Integer coinType) {
-        List<MineMachine> mineMachines = mineMachineService.findAll();
         return investDao.findListByCoinType(member,coinType);
+    }
+
+    @Override
+    public BigDecimal sum(Member member, Integer coinType) {
+        return jdbcTemplate.queryForObject("select sum(profit) from invest where userId="+member.getId()+" and coinType="+coinType,BigDecimal.class);
     }
 
     @Override
@@ -96,9 +100,6 @@ public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements 
         invest.setUserId(member.getId());
         invest.setUserName(member.getUsername());
         invest.setPhone(member.getPhone());
-
-
-
         super.save(invest);
     }
 }
