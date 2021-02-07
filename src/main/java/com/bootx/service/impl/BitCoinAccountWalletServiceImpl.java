@@ -65,4 +65,9 @@ public class BitCoinAccountWalletServiceImpl extends BaseServiceImpl<BitCoinAcco
     public BigDecimal sumMoney(Long userId) {
         return jdbcTemplate.queryForObject("select sum((bitcoinaccountwallet.money-bitcoinaccountwallet.frozenMoney)*bitcoinaccountwallet.price) from bitcoinaccountwallet as bitcoinaccountwallet where bitcoinaccountwallet.userId="+userId,BigDecimal.class);
     }
+
+    @Override
+    public BitCoinAccountWallet findByUserIdAndAssetType(Long userId, Integer assetType) {
+        return bitCoinAccountWalletDao.findByUserIdAndAssetType(userId, assetType);
+    }
 }

@@ -49,8 +49,7 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 		List<BitCoinAccount> bitCoinAccounts = bitCoinAccountDao.findByUserId(userId);
 		for (BitCoinAccount bitCoinAccount:bitCoinAccounts) {
 			if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccount.getName())){
-				bitCoinAccount.setPrice(BigDecimal.valueOf(Double.parseDouble(ethAdminService.ethGetBalance(bitCoinAccount.getAddressId()))));
-				bitCoinAccount.setMoney(bitCoinAccount.getPrice().divide(new BigDecimal(2)));
+				get(bitCoinAccount);
 			}
 		}
 		return bitCoinAccounts;
@@ -77,7 +76,7 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 				bitCoinAccount.setUserId(member.getId());
 
 				if(StringUtils.equalsIgnoreCase("JLB",bitCoinAccount.getName())){
-					NewAccountIdentifier newAccountIdentifier = ethAdminService.newAccountIdentifier(member.getUsername());
+					NewAccountIdentifier newAccountIdentifier = ethAdminService.newAccountIdentifier(member.getMobile());
 					if(newAccountIdentifier!=null){
 						bitCoinAccount.setAddressId(newAccountIdentifier.getAccountId());
 						member.setAccountId(bitCoinAccount.getAddressId());
@@ -153,6 +152,60 @@ public class BitCoinAccountServiceImpl extends BaseServiceImpl<BitCoinAccount, L
 			bitCoinAccountWalletService.update(bitCoinAccountWallet);
 		}
 	}
+
+	@Override
+	public BitCoinAccount get(BitCoinAccount bitCoinAccount) {
+		bitCoinAccount.setPrice(BigDecimal.valueOf(Double.parseDouble(ethAdminService.ethGetBalance(bitCoinAccount.getAddressId()))));
+		bitCoinAccount.setMoney(bitCoinAccount.getPrice().divide(new BigDecimal(2)));
+
+		return bitCoinAccount;
+	}
+
+	@Override
+	public boolean frozen(Long userId, BigDecimal frozenMoney, Integer assetType) {
+		BitCoinAccount bitCoinAccount = findByUserIdAndAssetType(userId, assetType);
+		bitCoinAccount.setFrozenMoney(bitCoinAccount.getFrozenMoney().add(frozenMoney));
+		if(bitCoinAccount.getFrozenMoney().compareTo(bitCoinAccount.getMoney())>0){
+			return false;
+		}
+
+
+		BitCoinAccountMoney bitCoinAccountMoney = bitCoinAccountMoneyService.findByUserIdAndAssetType(userId, assetType);
+		bitCoinAccountMoney.setFrozenMoney(bitCoinAccountMoney.getFrozenMoney().add(frozenMoney));
+		if(bitCoinAccountMoney.getFrozenMoney().compareTo(bitCoinAccountMoney.getMoney())>0){
+			return false;
+		}
+
+		BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletService.findByUserIdAndAssetType(userId, assetType);
+		bitCoinAccountWallet.setFrozenMoney(bitCoinAccountWallet.getFrozenMoney().add(frozenMoney));
+		if(bitCoinAccountWallet.getFrozenMoney().compareTo(bitCoinAccountWallet.getMoney())>0){
+			return false;
+		}
+
+
+		super.update(bitCoinAccount);
+		bitCoinAccountMoneyService.update(bitCoinAccountMoney);
+		bitCoinAccountWalletService.update(bitCoinAccountWallet);
+		return true;
+	}
+
+	@Override
+	public boolean unFrozen(Long userId, BigDecimal frozenMoney, Integer assetType) {
+		BitCoinAccount bitCoinAccount = findByUserIdAndAssetType(userId, assetType);
+		bitCoinAccount.setFrozenMoney(bitCoinAccount.getFrozenMoney().subtract(frozenMoney));
+
+		BitCoinAccountMoney bitCoinAccountMoney = bitCoinAccountMoneyService.findByUserIdAndAssetType(userId, assetType);
+		bitCoinAccountMoney.setFrozenMoney(bitCoinAccountMoney.getFrozenMoney().subtract(frozenMoney));
+
+		BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletService.findByUserIdAndAssetType(userId, assetType);
+		bitCoinAccountWallet.setFrozenMoney(bitCoinAccountWallet.getFrozenMoney().subtract(frozenMoney));
+
+		super.update(bitCoinAccount);
+		bitCoinAccountMoneyService.update(bitCoinAccountMoney);
+		bitCoinAccountWalletService.update(bitCoinAccountWallet);
+		return true;
+	}
+
 
 	private BitCoinAccount initAccount(Member member, Integer assetType) {
 		BitCoinType bitCoinType = bitCoinTypeService.findByAssetType(assetType);

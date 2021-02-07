@@ -9,7 +9,6 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.NewAccountIdentifier;
 import org.web3j.protocol.admin.methods.response.PersonalListAccounts;
-import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.*;
@@ -58,6 +57,7 @@ public class EthAdminServiceImpl implements EthAdminService {
     @Override
     public String ethGetBalance(String address) {
         try{
+            System.out.println("ethGetBalance:"+address);
             EthGetBalance ethGetBalance = admin.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
             System.out.println(address);
             BigDecimal bigDecimal = new BigDecimal(ethGetBalance.getBalance());
@@ -78,13 +78,11 @@ public class EthAdminServiceImpl implements EthAdminService {
     @Override
     @Async
     public String transferEther(Member from, Member to, BigDecimal amount) {
+        System.out.println("============================================================================================");
         BigInteger value = Convert.toWei(amount, Convert.Unit.ETHER).toBigInteger();
-        System.out.println(value);
-        System.out.println(ethGetBalance(from.getAccountId()));
+        System.out.println(from.getAccountId()+":"+to.getAccountId()+":"+value);
         try{
-            geth.personalUnlockAccount(from.getAccountId(),from.getUsername()).send();
-            PersonalUnlockAccount send1 = geth.personalUnlockAccount(to.getAccountId(), to.getUsername()).send();
-            Boolean aBoolean = send1.accountUnlocked();
+            geth.personalUnlockAccount(from.getAccountId(),from.getMobile()).send();
             EthGasPrice send = geth.ethGasPrice().send();
             BigInteger gasPrice = send.getGasPrice();
             EthGetTransactionCount transactionCount = web3j.ethGetTransactionCount(from.getAccountId(), DefaultBlockParameterName.LATEST).send();
@@ -96,18 +94,12 @@ public class EthAdminServiceImpl implements EthAdminService {
                 nonce = new BigInteger("0x0");
             }
             Transaction transaction = Transaction.createEtherTransaction(from.getAccountId(),nonce,gasPrice,gasPrice,to.getAccountId(),value);
-            EthSendTransaction ethSendTransaction = admin.personalSendTransaction(transaction, from.getUsername()).send();
-            System.out.println(ethSendTransaction.getTransactionHash());
+            EthSendTransaction ethSendTransaction = admin.personalSendTransaction(transaction, from.getMobile()).send();
+            System.out.println(from.getAccountId()+":"+to.getAccountId()+":"+ethSendTransaction.getTransactionHash());
             return ethSendTransaction.getTransactionHash();
         }catch (Exception e){
             e.printStackTrace();
-        }
-
-        try {
-            geth.personalLockAccount(from.getAccountId()).send();
-            geth.personalLockAccount(to.getAccountId()).send();
-        }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(from.getAccountId()+":"+to.getAccountId()+":error");
         }
         return "0.00";
     }

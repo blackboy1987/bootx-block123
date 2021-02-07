@@ -63,7 +63,7 @@ public class BitCoinAccountDaoImpl extends BaseDaoImpl<BitCoinAccount, Long> imp
         Root<BitCoinAccount> root = criteriaQuery.from(BitCoinAccount.class);
         criteriaQuery.select(root);
         if(userId==null|| assetType==null){
-            return new BitCoinAccount();
+            return null;
         }
         Predicate restrictions = criteriaBuilder.conjunction();
         restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("userId"), userId));
@@ -72,7 +72,7 @@ public class BitCoinAccountDaoImpl extends BaseDaoImpl<BitCoinAccount, Long> imp
         try{
             return super.findList(criteriaQuery, null, null, null, null).get(0);
         }catch (Exception e){
-            return new BitCoinAccount();
+            return null;
         }
     }
 

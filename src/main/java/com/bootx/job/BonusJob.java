@@ -13,7 +13,7 @@ public class BonusJob {
     @Resource
     private BonusService bonusService;
 
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 10 0 * * ? ")
     public void run (){
         System.out.println(new Date()+"=====================");
         bonusService.bonus();

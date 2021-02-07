@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html class="ui-page-login " lang="zh_CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>算力蜂</title>
+    <link rel="stylesheet" href="/css/icon.css">
+    <link rel="shortcut icon" href="/user/images/favicon.ico">
+    <link href="/wap/css/mui.min.css" rel="stylesheet" />
+    <link href="/wap/css/style.css" rel="stylesheet" />
+    <link href="/wap/css/verify.css" rel="stylesheet" />
+    <script type='text/javascript' src='/wap/js/jquery-1.11.1.min.js'></script>
+    <script type='text/javascript' src="/wap/js/mui.min.js"></script>
+    <script type='text/javascript' src="/wap/js/common.js"></script>
+    <link href="/wap/js/mui.loading.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/wap/js/mui.loading.js"></script>
+    <script type="text/javascript" src="/wap/js/crypto-js.js"></script>
+    <script type="text/javascript" src="/wap/js/ase.js"></script>
+    <script type="text/javascript" src="/wap/js/verify.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%
+        }
+        .g-index {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #3841ff;
+        }
+
+        ::-webkit-input-placeholder {
+            color: #b2b2b2;
+        }
+
+        ::-moz-placeholder {
+            color: #b2b2b2;
+        }
+        /* firefox 19+ */
+
+        :-ms-input-placeholder {
+            color: #b2b2b2;
+        }
+        /* ie */
+
+        input:-moz-placeholder {
+            color: #b2b2b2;
+
+        }
+
+        .login-header {
+            position: absolute;
+            z-index: 2222;
+            width: 100%;
+            padding: 0;!important;
+            background: #3841ff;
+        }
+
+        .login-content {
+            position: absolute;
+            z-index: 2222;
+            top: 30%;
+            width: 100%
+        }
+
+        .reg .mui-checkbox.mui-left label {
+            color: #fff
+        }
+
+        #login-form.mui-input-group .mui-input-row {
+            margin-bottom: 4.3%;
+            border-radius:20px;
+            background-color:#3841ff ;
+        }
+        .mui-input-group:after{
+            background-color: #3841ff !important;
+        }
+        #login-form{
+            padding: 0 24px 0 24px!important;
+            margin: 5% 0 0 0 !important;
+        }
+
+        .reg .mui-checkbox input[type=checkbox]:checked:before, .mui-radio input[type=radio]:checked:before {
+            color: #00CDB9;
+        }
+        .yzm{
+            width: 65% !important;
+        }
+        .achieve{
+            color: #2C95E8;
+            width: 95px;
+            height: 40px;
+            position: absolute;
+            top: 55px;
+            right: 25px;
+            border-radius:20px;
+            font-size: 13px;
+            line-height: 40px;;
+            padding-left: 13px;
+            /*background-image: linear-gradient(90deg, #ff634f, #fd9c33);*/
+            color: #ffffff!important;
+        }
+        .mui-btn-block{
+            width: 110%!important;
+            position: absolute;
+            top: 110% !important;
+            left: -6% !important;
+        }
+        input{
+            padding: 0 0 0 35px!important;
+            background: #f5f5f5 !important;
+        }
+        /*.icon-add-account{*/
+        /*	position: absolute;*/
+        /*	left: 10px;*/
+        /*	top: 25%;*/
+        /*}*/
+        .iconfont{
+            font-size: 25px;
+            color: #c1c1c1;
+            position: absolute;
+            left: 10px;
+            top: 18%;
+        }
+        .mui-btn-xs{
+            background:#3841ff !important;
+            padding: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+<div id="particles">
+    <div class="g-index"></div>
+    <header class="login-header">
+        <img id="header-bg" src="/wap/image/541.png" style="width:100%">
+        <!--					<img src="wap/image/541.png" width="750px" height="390px">-->
+    </header>
+    <div class="mui-content login-content" style="background: #3841ff;">
+        <form id='login-form' class="mui-input-group" style="background: #3841ff;">
+            <div class="mui-input-row">
+                <i class="iconfont icon-bangdingshouji" style="font-size: 19px"></i>
+                <input id='phone' name="phone" type="text" class="mui-input-clear mui-input" autocomplete="off" placeholder="请输入手机号码" maxlength="11" style="padding: 10px 15px;">
+            </div>
+            <a class="achieve" href="#" style="color: #2C95E8;background-image: linear-gradient(90deg, #ff634f, #fd9c33);"  id="sendsms">获取验证码</a>
+            <div class="mui-input-row yzm">
+                <i class="iconfont icon-anquanrenzheng"></i>
+                <input id='yzm' type="number" name="phonecode" class="mui-input-clear mui-input phonecode" autocomplete="off" placeholder="验证码">
+            </div>
+            <div class="mui-input-row">
+                <i class="iconfont icon-password1"></i>
+                <input id='password' name="password" type="password" class="mui-input-clear mui-input" autocomplete="off" placeholder="请输入8-16位密码" maxlength="16">
+            </div>
+            <div class="mui-input-row">
+                <i class="iconfont icon-password1"></i>
+                <input id='repassword' name="repassword" type="password" class="mui-input-clear mui-input" autocomplete="off" placeholder="请再次输入密码" maxlength="16">
+            </div>
+            <div class="mui-input-row">
+                <i class="iconfont icon-account"></i>
+                <input id='name' name="name" type="text" class="mui-input-clear mui-input" autocomplete="off" placeholder="请输入姓名" maxlength="12">
+            </div>
+            <div class="mui-input-row mui-hidden" style="margin-bottom: 0">
+                <i class="iconfont icon-add-account"></i>
+                <input id='extendCode' name="extendCode" type="text" value="73161116">
+            </div>
+        </form>
+        <div class="mui-content-padded reg" style="position: relative">
+            <div class="mui-input-row mui-checkbox mui-left" style="font-size: small;">
+                <label style="padding-left: 30px; padding-right: 0px;">我已阅读并接受 </label><a  href="/wap/agreement" style="color: #fff;">《算力蜂服务条款》</a>
+                <!--						<label for="input-checkbox" style="background-color: red"></label>-->
+                <input id="input-checkbox" name="checkbox" type="checkbox" class="mui-btn-xs" style="left: 0px">
+            </div>
+            <button id='register' type="button" class="mui-btn mui-btn-block mui-btn-primary" style="border-radius: 20px;;border: 0px; background-image: linear-gradient(90deg, #ff634f, #fd9c33); padding: 10px 0;">立即注册</button>
+        </div>
+    </div>
+    <div id="verify-content"></div>
+</div>
+<script>
+    // #login-form .mui-input-group:after
+    var form = $("#login-form");
+    var mobile = 0;
+    var ipfsActivityStatus = false
+    var registerChannel = 1
+    if (ipfsActivityStatus == true) {
+        $("#header-bg").attr("src", "/wap/image/header-bg.png");
+        $("header.login-header,div.login-content,#login-form,.g-index"
+        ).css({ "cssText": "background-color: #d61800 !important" });
+        $("#input-checkbox").css("cssText","background: #d61800 !important;left: 0;")
+        $("#login-form").append("<style>#login-form:after{background-color:#d61800 !important;}</style>")
+    }
+    document.getElementById('register').addEventListener('tap', function(){
+        var params = form.serializeJson();
+        var url = registerChannel == 3 ? "/user/center/reg" : "/user/registerData";
+
+        if (Common.isNull(params.phone)) {
+            mui.toast("手机号不能为空");
+            return false;
+        } else if (Common.isPhoneAvailable(params.phone)) {
+            mui.toast("请输入正确的手机号");
+            return false;
+        }
+        if(Common.isNull(params.phonecode)){
+            mui.toast("短信验证码不能为空");
+            return false;
+        }
+        if (Common.isNull(params.password)) {
+            mui.toast("密码不能为空");
+            return false;
+        } else if (Common.passWord(params.password)){
+            mui.toast("请输入8位到16位的数字或字母的密码");
+            return false;
+        }
+
+        if (Common.isNull(params.repassword)) {
+            mui.toast("确认密码不能为空");
+            return false;
+        } else if (Common.passWord(params.repassword)){
+            mui.toast("请输入8位到16位的数字或字母的确认密码");
+            return false;
+        }
+
+        if (params.password.trim() != params.repassword.trim()) {
+            mui.toast("两次密码输入不一致");
+            return false;
+        }
+        if (Common.isNull(params.name)) {
+            mui.toast("姓名不能为空");
+            return false;
+        }
+        if (!$("input[type='checkbox']").is(':checked')) {
+            mui.toast("请阅读并接受服务条款");
+            return false;
+        }
+        $("#register").addClass("mui-disabled");
+        mui.showLoading("注册中...", "div");
+        mui.ajax(Common.basePath + url, {
+            data: params,
+            dataType: 'json', //服务器返回json格式数据
+            type: 'POST',
+            timeout: 10000, //超时时间设置为10秒；
+            success: function (data) {
+                mui.hideLoading();
+                if (data.type == 200) {
+                    mui.toast("注册成功，正在跳转APP下载页面");
+                    setTimeout(function(){
+                        location.href = "/down/wap/app";
+                    },1500)
+                } else {
+                    // 500 warn
+                    $("#register").removeClass("mui-disabled");
+                    mui.alert(data.content);
+                }
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                mui.hideLoading();
+                $("#register").removeClass("mui-disabled");
+                mui.toast("网络异常，无法访问");
+            }
+        });
+    });
+
+    //服务条款-- 跳转
+    $("#terms").click(function() {
+        // location.href="invite.html"
+        mui.openWindow({
+            url: 'agreement.html',
+            id: 'agreement.html'
+        });
+    });
+    $('input[name="phone"]').on('input', function(e){
+        if (e.target.value.length == 11) {
+            var phone = e.target.value;
+            if (!checkPhone(phone)) return false;
+            // 加载点选验证码
+            popVerify({
+                rootEl: $('#verify-content'),
+                clickEl: 'sendsms',
+                phone: phone,
+                beforeCheck: checkPhone,
+                successCallback: sendSms
+            });
+        }
+    })
+    $("#sendsms").on("click",function(){
+        mobile = $('input[name="phone"]').val();
+        checkPhone(mobile)
+    })
+    var sendSms = function () {
+        mui.showLoading("短信发送中", "div");
+        var checkurl = "/common/code/phone/add_user";
+        isGetCode = false;
+        mobile = $('input[name="phone"]').val();
+        mui.ajax(Common.basePath + checkurl, {
+            data: {tel:mobile},
+            dataType: 'json', //服务器返回json格式数据
+            type: 'POST',
+            timeout: 10000, //超时时间设置为10秒；
+            success: function (data) {
+                mui.hideLoading();
+                if (data.type == 200) {
+                    $("#sendsms").css("color","#F20B0B");
+                    reget(60);
+                } else {
+                    // 500 warn
+                    isGetCode = true;
+                    mui.alert(data.content);
+                }
+            },
+            error: function (xhr, type, errorThrown) {
+                //异常处理；
+                mui.hideLoading();
+                isGetCode = true;
+                mui.toast("网络异常，无法访问");
+            }
+        });
+    }
+    var isGetCode = true;
+    //发送验证码
+    var checkPhone = function(phone){
+        if(isGetCode){
+            mobile = $('input[name="phone"]').val();
+            if (isPhoneAvailable(mobile)) {
+                mui.toast("请输入正确的手机号");
+                return false;
+            }
+        }
+        return true;
+    }
+    var isPhoneAvailable = function (phone) {
+        var reg = /^1[3-9]\d{9}$/;
+        if (reg.test(phone)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function reget(count){
+        var mobj = $('input[name="phone"]');
+        var btn = $("#sendsms");
+        var count = count;
+        var resend = setInterval(function(){
+            count--;
+            if (count > 0){
+                btn.html(count+"s后再试");
+            }else {
+                clearInterval(resend);
+                $("#sendsms").css("color","#00CDB9");
+                btn.html("重获验证码");
+                isGetCode = true;
+            }
+        }, 1000);
+
+
+    }
+    ; (function () {
+        /**
+         * 滑块验证码
+         */
+        window.popVerify = function (option) {
+            option.rootEl = option.rootEl || '';
+            option.clickEl = option.clickEl || '';
+            option.beforeCheck = option.beforeCheck || function () { return true };
+            option.successCallback = option.successCallback || function () { };
+            option.errCallBack = option.errCallBack || function () { };
+            $(option.rootEl).html('');
+            option.rootEl.pointsVerify({
+                baseUrl: Common.basePath,
+                mode:'pop',     //展示模式
+                containerId: option.clickEl,//pop模式 必填 被点击之后出现行为验证码的元素id
+                imgSize : {       //图片的大小对象,有默认值{ width: '310px',height: '155px'},可省略
+                    width: (document.documentElement.clientWidth - 80)+'px',
+                    height: '200px',
+                },
+                barSize:{          //下方滑块的大小对象,有默认值{ width: '310px',height: '50px'},可省略
+                    width: (document.documentElement.clientWidth - 80)+'px',
+                    height: '40px',
+                },
+                phone: option.phone,
+                beforeCheck: option.beforeCheck,
+                success : option.successCallback,
+                error : option.errorCallback
+            });
+        }
+    })(Common);
+</script>
+</body>
+
+</html>

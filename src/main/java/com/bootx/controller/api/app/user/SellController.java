@@ -8,6 +8,7 @@ import com.bootx.entity.*;
 import com.bootx.security.CurrentUser;
 import com.bootx.service.*;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 
 @RestController("appSellController")
 @RequestMapping("/app/user/sell")
+@CrossOrigin
 public class SellController extends BaseController {
 
     @Resource
@@ -48,7 +50,9 @@ public class SellController extends BaseController {
     @PostMapping("/submit")
     @JsonView(BaseEntity.ViewView.class)
     public Result submit(@CurrentUser Member member, BigDecimal rmbAmount,BigDecimal jlbCount,Long payInfoId){
-
+        if(jlbCount.compareTo(BigDecimal.ZERO)<0){
+            return Result.error("数量填写不正确，挂单失败");
+        }
 
         ReceiptAccount receiptAccount = receiptAccountService.find(payInfoId);
         if(receiptAccount==null || receiptAccount.getUserId().compareTo(member.getId())!=0){

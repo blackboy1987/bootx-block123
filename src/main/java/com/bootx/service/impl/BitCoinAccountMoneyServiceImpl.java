@@ -1,5 +1,6 @@
 
 package com.bootx.service.impl;
+
 import com.bootx.dao.BitCoinAccountMoneyDao;
 import com.bootx.entity.BitCoinAccount;
 import com.bootx.entity.BitCoinAccountMoney;
@@ -55,5 +56,10 @@ public class BitCoinAccountMoneyServiceImpl extends BaseServiceImpl<BitCoinAccou
             bitCoinAccountMoney.setMoney(bitCoinAccountMoney.getPrice().divide(new BigDecimal(2)));
         }
         return bitCoinAccountMoney;
+    }
+
+    @Override
+    public BitCoinAccountMoney findByUserIdAndAssetType(Long userId, Integer assetType) {
+        return bitCoinAccountMoneyDao.findByUserIdAndAssetType(userId,assetType);
     }
 }

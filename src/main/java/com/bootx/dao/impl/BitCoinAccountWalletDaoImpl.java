@@ -35,4 +35,24 @@ public class BitCoinAccountWalletDaoImpl extends BaseDaoImpl<BitCoinAccountWalle
             return null;
         }
     }
+
+    @Override
+    public BitCoinAccountWallet findByUserIdAndAssetType(Long userId, Integer assetType) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<BitCoinAccountWallet> criteriaQuery = criteriaBuilder.createQuery(BitCoinAccountWallet.class);
+        Root<BitCoinAccountWallet> root = criteriaQuery.from(BitCoinAccountWallet.class);
+        criteriaQuery.select(root);
+        if(userId==null|| assetType==null){
+            return null;
+        }
+        Predicate restrictions = criteriaBuilder.conjunction();
+        restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("userId"), userId));
+        restrictions = criteriaBuilder.and(restrictions, criteriaBuilder.equal(root.get("assetType"), assetType));
+        criteriaQuery.where(restrictions);
+        try{
+            return super.findList(criteriaQuery, null, null, null, null).get(0);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

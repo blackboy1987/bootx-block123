@@ -33,4 +33,10 @@ public interface BitCoinAccountService extends BaseService<BitCoinAccount, Long>
     boolean transaction(BitCoinAccount bitCoinAccount, BitCoinAccount toBitCoinAccount, BigDecimal money);
 
     void updateBitCoinMoney(BitCoinAccount bitCoinAccount,BigDecimal money,Member member);
+
+    BitCoinAccount get(BitCoinAccount bitCoinAccount);
+
+    boolean frozen(Long userId, BigDecimal frozenMoney, Integer assetType);
+
+    boolean unFrozen(Long userId, BigDecimal frozenMoney, Integer assetType);
 }

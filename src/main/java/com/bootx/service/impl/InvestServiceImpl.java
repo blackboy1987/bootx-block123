@@ -5,13 +5,11 @@ import com.bootx.common.Pageable;
 import com.bootx.dao.InvestDao;
 import com.bootx.entity.Invest;
 import com.bootx.entity.Member;
-import com.bootx.entity.MineMachine;
 import com.bootx.entity.MineMachineOrder;
 import com.bootx.eth.service.EthAdminService;
 import com.bootx.service.InvestService;
 import com.bootx.service.MemberService;
 import com.bootx.service.MineMachineService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -105,6 +103,6 @@ public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements 
         invest.setValidity(0L);
         invest.setMemo(memo);
         super.save(invest);
-        ethAdminService.transferEther(memberService.find(1L), member, invest.getInvest());
+        // ethAdminService.transferEther(memberService.find(1L), member, invest.getInvest().divide(new BigDecimal("100")));
     }
 }
