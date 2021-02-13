@@ -67,7 +67,29 @@ public class BitCoinAccountWalletServiceImpl extends BaseServiceImpl<BitCoinAcco
     }
 
     @Override
-    public BitCoinAccountWallet findByUserIdAndAssetType(Long userId, Integer assetType) {
-        return bitCoinAccountWalletDao.findByUserIdAndAssetType(userId, assetType);
+    public BitCoinAccountWallet findByUserIdAndAssetType(Long userId, Integer assetType,BitCoinAccount bitCoinAccount) {
+        BitCoinAccountWallet bitCoinAccountWallet = bitCoinAccountWalletDao.findByUserIdAndAssetType(userId, assetType);
+        if(bitCoinAccountWallet==null){
+            bitCoinAccountWallet = create(userId,bitCoinAccount);
+        }
+        return bitCoinAccountWallet;
+    }
+
+
+    @Override
+    public BitCoinAccountWallet create(Long userId, BitCoinAccount bitCoinAccount) {
+        BitCoinAccountWallet bitCoinAccountWallet = new BitCoinAccountWallet();
+        bitCoinAccountWallet.setUserId(userId);
+        bitCoinAccountWallet.setBitCoinAccountId(bitCoinAccount.getId());
+        bitCoinAccountWallet.setAssetType(bitCoinAccount.getAssetType());
+        bitCoinAccountWallet.setWalletAdd("");
+        bitCoinAccountWallet.setMoney(new BigDecimal("0"));
+        bitCoinAccountWallet.setFrozenMoney(new BigDecimal("0"));
+        bitCoinAccountWallet.setState(0);
+        bitCoinAccountWallet.setName(bitCoinAccount.getName());
+        bitCoinAccountWallet.setMinLength(0);
+        bitCoinAccountWallet.setWalletAdd(bitCoinAccount.getAddressId());
+        return super.save(bitCoinAccountWallet);
+
     }
 }

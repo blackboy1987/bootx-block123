@@ -51,4 +51,6 @@ public interface MemberRankService extends BaseService<MemberRank, Long> {
     MemberRank getLastest(Long orderCount);
 
 	Integer countMember(MemberRank memberRank);
+
+    MemberRank getLastest(Long orderCount, Long adClickCount);
 }

@@ -5,24 +5,20 @@ import com.bootx.common.Page;
 import com.bootx.common.Pageable;
 import com.bootx.dao.MemberDao;
 import com.bootx.dao.MemberDepositLogDao;
-import com.bootx.dao.MemberRankDao;
 import com.bootx.dao.PointLogDao;
 import com.bootx.entity.*;
-import com.bootx.service.MailService;
-import com.bootx.service.MemberService;
-import com.bootx.service.SmsService;
+import com.bootx.service.*;
 import com.bootx.util.CodeUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import javax.persistence.LockModeType;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -50,7 +46,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 	@Autowired
 	private MemberDao memberDao;
 	@Autowired
-	private MemberRankDao memberRankDao;
+	private MemberRankService memberRankService;
 	@Autowired
 	private MemberDepositLogDao memberDepositLogDao;
 	@Autowired
@@ -59,6 +55,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 	private MailService mailService;
 	@Autowired
 	private SmsService smsService;
+	@Resource
+	private MineMachineOrderService mineMachineOrderService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -263,7 +261,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 		member.setAmount(member.getAmount().add(amount));
 		MemberRank memberRank = member.getMemberRank();
 		if (memberRank != null && BooleanUtils.isFalse(memberRank.getIsSpecial())) {
-			MemberRank newMemberRank = memberRankDao.findByAmount(member.getAmount());
+			MemberRank newMemberRank = memberRankService.findByAmount(member.getAmount());
 			if (newMemberRank != null && newMemberRank.getAmount() != null && newMemberRank.getAmount().compareTo(memberRank.getAmount()) > 0) {
 				member.setMemberRank(newMemberRank);
 			}
@@ -285,12 +283,12 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 	@Override
 	@Transactional
 	public Member update(Member member) {
-		Assert.notNull(member, "[Assertion failed] - articleCategory is required; it must not be null");
+		return super.update(member);
+	}
 
-		setValue(member);
-		for (Member children : memberDao.findChildren(member, true, null)) {
-			setValue(children);
-		}
+	@Override
+	@Transactional
+	public Member update1(Member member) {
 		return super.update(member);
 	}
 
@@ -366,11 +364,23 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
 		if(member==null){
 			return Collections.emptyList();
 		}
-		return jdbcTemplate.queryForList("select id,username userName,isAuth,createdDate createDate,(select count(id) from users as child  where child.parent_id= users.id and dtype='Member') child from users as users where parent_id=? and dtype='Member'",member.getId());
+		return jdbcTemplate.queryForList("select member.id,username userName,isAuth,users.createdDate,(select count(id) from member as child  where child.parent_id= member.id) child from member as member,users as users where users.id=member.id and parent_id=?",member.getId());
 	}
 
 	@Override
 	public Page<Member> findPage(Pageable pageable, String username, String name, Date beginDate, Date endDate) {
 		return memberDao.findPage(pageable,username,name,beginDate,endDate);
+	}
+
+	@Override
+	public void updateMemberRank(Member member) {
+		if(member==null){
+			return;
+		}
+		Long orderCount = mineMachineOrderService.countTeam(member);
+		Long adClickCount = member.getAdClickCount();
+		memberRankService.getLastest(orderCount,adClickCount);
+
+
 	}
 }

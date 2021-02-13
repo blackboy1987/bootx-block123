@@ -59,6 +59,15 @@ public class MemberRank extends BaseEntity<Long> {
 	private Integer mineMachineCount;
 
 	/**
+	 * 点击广告的次数
+	 */
+	@NotNull
+	@Min(0)
+	@Column(nullable = false,unique = true)
+	@JsonView({PageView.class})
+	private Long adClickCount;
+
+	/**
 	 * 是否默认
 	 */
 	@NotNull
@@ -146,6 +155,14 @@ public class MemberRank extends BaseEntity<Long> {
 
 	public void setMineMachineCount(Integer mineMachineCount) {
 		this.mineMachineCount = mineMachineCount;
+	}
+
+	public Long getAdClickCount() {
+		return adClickCount;
+	}
+
+	public void setAdClickCount(Long adClickCount) {
+		this.adClickCount = adClickCount;
 	}
 
 	/**

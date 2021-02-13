@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
 
 /**
  * Service - 广告
@@ -87,6 +86,6 @@ public class MineMachineOrderServiceImpl extends BaseServiceImpl<MineMachineOrde
         if(member==null){
             return 0L;
         }
-        return jdbcTemplate.queryForObject("select * from minemachineorder where userId in (select id from member where parent_id="+member.getId()+") and (state=2 or state=3)", Long.class);
+        return jdbcTemplate.queryForObject("select count(id) from minemachineorder where userId in (select id from member where parent_id="+member.getId()+") and (state=2 or state=3)", Long.class);
     }
 }

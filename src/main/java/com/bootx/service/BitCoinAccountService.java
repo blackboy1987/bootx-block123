@@ -19,6 +19,7 @@ public interface BitCoinAccountService extends BaseService<BitCoinAccount, Long>
     List<BitCoinAccount> findByUserId(Long userId);
 
     BitCoinAccount findByUserIdAndName(Long userId,String name);
+    BitCoinAccount create(Long userId,Integer assetType);
 
     void initAccount(Member member);
 
@@ -39,4 +40,6 @@ public interface BitCoinAccountService extends BaseService<BitCoinAccount, Long>
     boolean frozen(Long userId, BigDecimal frozenMoney, Integer assetType);
 
     boolean unFrozen(Long userId, BigDecimal frozenMoney, Integer assetType);
+
+    boolean addMoney(Member member,BigDecimal bouns,Integer assetType);
 }

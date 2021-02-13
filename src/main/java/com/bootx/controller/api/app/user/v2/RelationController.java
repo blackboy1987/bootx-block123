@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@RestController("appUserV2RelationController")
 @RequestMapping("/app/user/v2/relation")
 public class RelationController extends BaseController {
 
@@ -42,7 +42,7 @@ public class RelationController extends BaseController {
         if(member.getIsAuth()){
             Map<String,Object> data= new HashMap<>();
             data.put("state",2);
-            data.put("invite","http://api.suanlifeng.com/wap/invite/"+member.getExtendCode()+"/"+ DigestUtils.md5Hex(member.getExtendCode()+""));
+            data.put("invite","http://jlbreg.i-gomall.com/wap/invite/"+member.getExtendCode()+"/"+ DigestUtils.md5Hex(member.getExtendCode()+""));
             data.put("posters", JsonUtils.toObject(sql, new TypeReference<List<Poster>>() {
             }));
             return Result.success(data);

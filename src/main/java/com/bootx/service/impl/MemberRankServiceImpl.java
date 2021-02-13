@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.web3j.abi.datatypes.Int;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -57,7 +56,7 @@ public class MemberRankServiceImpl extends BaseServiceImpl<MemberRank, Long> imp
 			orderCount = 0L;
 		}
 		try {
-			Map<String,Object> map = jdbcTemplate.queryForMap("select id,mineMachineCount from memberrank where mineMachineCount<55 order by mineMachineCount desc limit 1",new TypeReference<Map<String,Object>>(){
+			Map<String,Object> map = jdbcTemplate.queryForMap("select id,mineMachineCount from memberrank where mineMachineCount<"+orderCount+" order by mineMachineCount desc limit 1",new TypeReference<Map<String,Object>>(){
 
 			});
 			return find(Long.valueOf(map.get("id")+""));
@@ -96,5 +95,24 @@ public class MemberRankServiceImpl extends BaseServiceImpl<MemberRank, Long> imp
 			return 0;
 		}
 		return jdbcTemplate.queryForObject("select count(1) from member where memberRank_id="+memberRank.getId(), Integer.class);
+	}
+
+	@Override
+	public MemberRank getLastest(Long orderCount, Long adClickCount) {
+		if(orderCount==null){
+			orderCount = 0L;
+		}
+		if(adClickCount==null){
+			adClickCount = 0L;
+		}
+		try {
+			Map<String,Object> map = jdbcTemplate.queryForMap("select id,mineMachineCount from memberrank where mineMachineCount<="+orderCount+" and adClickCount<="+adClickCount+" order by mineMachineCount desc limit 1",new TypeReference<Map<String,Object>>(){
+
+			});
+			return find(Long.valueOf(map.get("id")+""));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

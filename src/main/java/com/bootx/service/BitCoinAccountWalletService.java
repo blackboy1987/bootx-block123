@@ -21,5 +21,6 @@ public interface BitCoinAccountWalletService extends BaseService<BitCoinAccountW
 
     BigDecimal sumMoney(Long userId);
 
-    BitCoinAccountWallet findByUserIdAndAssetType(Long userId, Integer assetType);
+    BitCoinAccountWallet findByUserIdAndAssetType(Long userId, Integer assetType,BitCoinAccount bitCoinAccount);
+    BitCoinAccountWallet create(Long userId, BitCoinAccount bitCoinAccount);
 }

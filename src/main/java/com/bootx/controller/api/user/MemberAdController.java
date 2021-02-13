@@ -53,9 +53,15 @@ public class MemberAdController extends BaseController {
         }else{
             assetType = 3;
         }
-        boolean flag = bitCoinAccountService.frozen(member.getId(),memberAd.getPrice().multiply(new BigDecimal(memberAd.getTimes())),assetType);
+        BigDecimal amount =memberAd.getPrice().multiply(new BigDecimal(memberAd.getTimes()));
+        boolean flag = bitCoinAccountService.frozen(member.getId(),amount,assetType);
         if(flag){
             memberAdService.save(memberAd);
+
+            if(assetType==6){
+                //TODO 锁定的时候直接币账户转给系统
+            }
+
             return Result.success("ok");
         }else{
             return Result.error("账户余额不足，发布失败");
@@ -126,6 +132,8 @@ public class MemberAdController extends BaseController {
         MemberAdStatistics memberAdStatistics = memberAd.getStatistics();
         memberAdStatistics.setReadCount(memberAdStatistics.getReadCount()+1);
         memberAdService.update(memberAd);
+        member.setAdClickCount(member.getAdClickCount()+1);
+        memberService.update(member);
         // 当前广告，当前会员 当天有没有看过记录
         boolean flag = memberAdReadLogService.create(member,memberAd);
         if(!flag){
@@ -134,14 +142,19 @@ public class MemberAdController extends BaseController {
             Integer coinType = memberAd.getCoinType();
             BitCoinAccount bitCoinAccount = null;
             if(coinType==0){
-                bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(member.getId(), 6);
+                bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(memberAd.getMember().getId(), 6);
             }else if(coinType==1){
-                bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(member.getId(),3);
+                bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(memberAd.getMember().getId(),3);
             }else{
-                bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(member.getId(),3);
+                bitCoinAccount = bitCoinAccountService.findByUserIdAndAssetType(memberAd.getMember().getId(),3);
             }
             bitCoinAccountService.unFrozen(member.getId(),price,bitCoinAccount.getAssetType());
-            moneyFlowLogService.create(price,bitCoinAccount.getMoney(),bitCoinAccount.getFrozenMoney(),bitCoinAccount.getAssetType(),bitCoinAccount.getName(),"浏览广告扣除",member.getId());
+            moneyFlowLogService.create(price,bitCoinAccount.getMoney(),bitCoinAccount.getFrozenMoney(),bitCoinAccount.getAssetType(),bitCoinAccount.getName(),"浏览广告扣除",memberAd.getMember().getId());
+            // 奖励点击的人 价格的10%作为奖励
+            BigDecimal bouns = price.multiply(new BigDecimal(0.1));
+            BitCoinAccount bitCoinAccount1 = bitCoinAccountService.findByUserIdAndAssetType(member.getId(),bitCoinAccount.getAssetType());
+            bitCoinAccountService.addMoney(member,bouns,bitCoinAccount.getAssetType());
+            moneyFlowLogService.create(bouns,bitCoinAccount1.getMoney(),bitCoinAccount1.getFrozenMoney(),bitCoinAccount1.getAssetType(),bitCoinAccount1.getName(),"浏览广告奖励",member.getId());
 
         }
 

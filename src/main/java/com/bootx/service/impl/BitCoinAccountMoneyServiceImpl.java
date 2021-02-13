@@ -59,7 +59,26 @@ public class BitCoinAccountMoneyServiceImpl extends BaseServiceImpl<BitCoinAccou
     }
 
     @Override
-    public BitCoinAccountMoney findByUserIdAndAssetType(Long userId, Integer assetType) {
-        return bitCoinAccountMoneyDao.findByUserIdAndAssetType(userId,assetType);
+    public BitCoinAccountMoney create (Long userId, Integer assetType,BitCoinAccount bitCoinAccount) {
+        BitCoinAccountMoney bitCoinAccountMoney = new BitCoinAccountMoney();
+        bitCoinAccountMoney.setUserId(userId);
+        bitCoinAccountMoney.setBitCoinAccountId(bitCoinAccount.getId());
+        bitCoinAccountMoney.setAssetType(bitCoinAccount.getAssetType());
+        bitCoinAccountMoney.setMoney(new BigDecimal("0"));
+        bitCoinAccountMoney.setFrozenMoney(new BigDecimal("0"));
+        bitCoinAccountMoney.setState(0);
+        bitCoinAccountMoney.setName(bitCoinAccount.getName());
+        bitCoinAccountMoney.setPrice(new BigDecimal("0"));
+        bitCoinAccountMoney.setLockMoney(BigDecimal.ZERO);
+        return super.save(bitCoinAccountMoney);
+    }
+
+    @Override
+    public BitCoinAccountMoney findByUserIdAndAssetType(Long userId, Integer assetType,BitCoinAccount bitCoinAccount) {
+        BitCoinAccountMoney bitCoinAccountMoney = bitCoinAccountMoneyDao.findByUserIdAndAssetType(userId,assetType);
+        if(bitCoinAccountMoney==null){
+            bitCoinAccountMoney = create(userId,assetType,bitCoinAccount);
+        }
+        return bitCoinAccountMoney;
     }
 }

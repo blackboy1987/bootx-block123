@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.lang.reflect.InvocationTargetException;
@@ -379,6 +380,19 @@ public class Member extends User {
 	private Integer grade;
 
 	/**
+	 * 点击广告的次数
+	 */
+	@NotNull
+	@Min(0)
+	@Column(nullable = false)
+	private Long adClickCount;
+
+	/**
+	 * 头像
+	 */
+	private String headImg;
+
+	/**
 	 * 获取树路径
 	 *
 	 * @return 树路径
@@ -416,7 +430,13 @@ public class Member extends User {
 		this.grade = grade;
 	}
 
+	public Long getAdClickCount() {
+		return adClickCount;
+	}
 
+	public void setAdClickCount(Long adClickCount) {
+		this.adClickCount = adClickCount;
+	}
 
 	/**
 	 * 获取用户名
@@ -1091,6 +1111,14 @@ public class Member extends User {
 		this.bitCoinAccounts = bitCoinAccounts;
 	}
 
+	public String getHeadImg() {
+		return headImg;
+	}
+
+	public void setHeadImg(String headImg) {
+		this.headImg = headImg;
+	}
+
 	/**
 	 * 获取会员注册项值
 	 * 
@@ -1124,11 +1152,7 @@ public class Member extends User {
 				try {
 					String propertyName = ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + memberAttribute.getPropertyIndex();
 					return PropertyUtils.getProperty(this, propertyName);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
+				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 					throw new RuntimeException(e.getMessage(), e);
 				}
 			}
@@ -1141,11 +1165,7 @@ public class Member extends User {
 					if (StringUtils.isNotEmpty(propertyValue)) {
 						return JsonUtils.toObject(propertyValue, List.class);
 					}
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
+				} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 					throw new RuntimeException(e.getMessage(), e);
 				}
 			}
@@ -1209,11 +1229,7 @@ public class Member extends User {
 				try {
 					String propertyName = ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + memberAttribute.getPropertyIndex();
 					PropertyUtils.setProperty(this, propertyName, memberAttributeValue);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
+				} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 					throw new RuntimeException(e.getMessage(), e);
 				}
 			}
@@ -1223,11 +1239,7 @@ public class Member extends User {
 				try {
 					String propertyName = ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + memberAttribute.getPropertyIndex();
 					PropertyUtils.setProperty(this, propertyName, memberAttributeValue != null ? JsonUtils.toJson(memberAttributeValue) : null);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
-					throw new RuntimeException(e.getMessage(), e);
-				} catch (NoSuchMethodException e) {
+				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 					throw new RuntimeException(e.getMessage(), e);
 				}
 			}
@@ -1251,11 +1263,7 @@ public class Member extends User {
 			String propertyName = ATTRIBUTE_VALUE_PROPERTY_NAME_PREFIX + i;
 			try {
 				PropertyUtils.setProperty(this, propertyName, null);
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e.getMessage(), e);
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e.getMessage(), e);
-			} catch (NoSuchMethodException e) {
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
 		}

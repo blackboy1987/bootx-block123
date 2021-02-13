@@ -1,6 +1,7 @@
 package com.bootx.controller.api.user;
 
 import com.bootx.common.Result;
+import com.bootx.entity.ArticleCategory;
 import com.bootx.entity.Member;
 import com.bootx.entity.MineMachine;
 import com.bootx.security.CurrentUser;
@@ -63,7 +64,10 @@ public class indexController {
                 return Result.error("邀请码不存在，注册失败");
             }else{
                 member.setParent(parent);
+                member.setGrade(parent.getGrade()+1);
             }
+        }else{
+            member.setGrade(0);
         }
 
         member.setExtendCode(memberService.createExtendCode());
@@ -75,6 +79,8 @@ public class indexController {
         member.setLastLoginIp("0:0:0:1");
         member.setEmail(member.getUsername()+"@qq.com");
         member.setMemberRank(memberRankService.findDefault());
+        member.setAdClickCount(0L);
+        setValue(member);
         userService.register(member);
         /**
          * 创建JLB账户
@@ -93,6 +99,16 @@ public class indexController {
         }
 
         return Result.success("");
+    }
+
+    private void setValue(Member member) {
+        Member parent = member.getParent();
+        if (parent != null) {
+            member.setTreePath(parent.getTreePath() + parent.getId() + ArticleCategory.TREE_PATH_SEPARATOR);
+        } else {
+            member.setTreePath(ArticleCategory.TREE_PATH_SEPARATOR);
+        }
+        member.setGrade(member.getParentIds().length);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

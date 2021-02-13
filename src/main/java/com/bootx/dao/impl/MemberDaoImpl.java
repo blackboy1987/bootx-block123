@@ -188,7 +188,7 @@ public class MemberDaoImpl extends BaseDaoImpl<Member, Long> implements MemberDa
 		TypedQuery<Member> query;
 		if (recursive) {
 			if (member != null) {
-				String jpql = "select member from Member member where member.treePath like :treePath order by member.grade asc, member.createdDate asc";
+				String jpql = "select member from Member member where member.treePath like :treePath order by member.grade asc,member.createdDate asc";
 				query = entityManager.createQuery(jpql, Member.class).setParameter("treePath", "%" + Member.TREE_PATH_SEPARATOR + member.getId() + Member.TREE_PATH_SEPARATOR + "%");
 			} else {
 				String jpql = "select member from Member member order by member.grade asc, member.createdDate asc";

@@ -19,6 +19,8 @@ public final class CommonAttributes {
 	 */
 	public static final String 好源XX_XML_PATH = "classpath:shopxx.xml";
 
+	// public static final String 好源XX_XML_PATH = "/root/shopxx.xml";
+
 	/**
 	 * shopxx.properties文件路径
 	 */

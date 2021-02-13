@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-@RestController
+@RestController("appUserV2AuthController")
 @RequestMapping("/app/user/v2/auth")
 public class AuthController extends BaseController {
 

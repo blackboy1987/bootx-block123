@@ -18,7 +18,6 @@ import com.bootx.service.BitCoinAccountService;
 import com.bootx.service.MemberRankService;
 import com.bootx.service.MemberService;
 import com.bootx.service.MineMachineOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,7 +57,7 @@ public class OrderController extends BaseController {
         }
         Map<String,Object> data = new HashMap<>();
         Pageable pageable = new Pageable(page,10);
-        Page<MineMachineOrder> page1 = mineMachineOrderService.findPage(pageable);
+        Page<MineMachineOrder> page1 = mineMachineOrderService.findPage(pageable,member,excision,null,null);
         data.put("list",page1.getContent());
         data.put("page",page1.getPageNumber());
         data.put("excision",excision);

@@ -6,6 +6,7 @@ import com.bootx.entity.Member;
 import com.bootx.security.CurrentUser;
 import com.bootx.service.*;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +69,7 @@ public class IndexController {
         data.put( "shopName",null);
         data.put( "shopType",null);
         data.put( "typeName",null);
+        data.put("headImg",member.getHeadImg());
         
         
         
@@ -113,15 +115,21 @@ public class IndexController {
         }
         return Result.success(articleService.findLastest());
     }
-    @PostMapping("/relation/list")
-    public Result relationList(HttpServletRequest request, @CurrentUser Member member){
+
+    @PostMapping("/head_img")
+    public Result headImg(HttpServletRequest request, @CurrentUser Member member,String headImg){
         if(member==null){
             member = memberService.getCurrent(request);
         }
         if(member==null){
             return Result.error("登录信息已过期");
         }
-        return Result.success(memberService.findListTeam(member));
+        if(StringUtils.isNotBlank(headImg)){
+            member.setHeadImg(headImg);
+            memberService.update1(member);
+        }
+
+        return Result.success("ok");
     }
 
 }
