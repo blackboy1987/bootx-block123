@@ -17,6 +17,7 @@ import javax.persistence.criteria.Root;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Dao - 广告
@@ -100,5 +101,15 @@ public class InvestDaoImpl extends BaseDaoImpl<Invest, Long> implements InvestDa
         }
         criteriaQuery.where(restrictions);
         return super.findList(criteriaQuery);
+    }
+
+    @Override
+    public Map<String, Object> findOne(Integer type1) {
+        try{
+            Map<String, Object> map = jdbcTemplate.queryForMap("select id,userId,invest from invest where status=0 and type1=" + type1 + " order by createdDate desc limit 1");
+            return map;
+        }catch (Exception e){
+            return null;
+        }
     }
 }

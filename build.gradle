@@ -70,6 +70,7 @@ dependencies {
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
     compile 'jaxen:jaxen:1.2.0'
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.4.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service - 广告
@@ -53,6 +54,11 @@ public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements 
     @Override
     public List<Invest> findList1(Member member, Integer excision, Long productId, Integer type, Integer coinType, Date beginDate, Date endDate) {
         return investDao.findList1(member,excision,mineMachineService.find(productId),type,coinType,beginDate,endDate);
+    }
+
+    @Override
+    public Map<String, Object> findOne(Integer type1) {
+        return investDao.findOne(type1);
     }
 
     @Override
@@ -102,7 +108,8 @@ public class InvestServiceImpl extends BaseServiceImpl<Invest, Long> implements 
         invest.setUserName(member.getUsername());
         invest.setValidity(0L);
         invest.setMemo(memo);
+        invest.setType1(0);
+        invest.setStatus(0);
         super.save(invest);
-        // ethAdminService.transferEther(memberService.find(1L), member, invest.getInvest().divide(new BigDecimal("100")));
     }
 }

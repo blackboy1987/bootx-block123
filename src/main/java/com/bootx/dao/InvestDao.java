@@ -9,6 +9,7 @@ import com.bootx.entity.MineMachine;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Dao - 广告
@@ -23,4 +24,6 @@ public interface InvestDao extends BaseDao<Invest, Long> {
     Page<Invest> findPage(Pageable pageable, Member member, Integer excision, MineMachine mineMachine, Integer type, Integer coinType, Date beginDate, Date endDate);
 
     List<Invest> findList1(Member member, Integer excision, MineMachine mineMachine, Integer type, Integer coinType, Date beginDate, Date endDate);
+
+    Map<String, Object> findOne(Integer type1);
 }

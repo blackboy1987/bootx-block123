@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.geth.Geth;
 import org.web3j.utils.Convert;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -28,11 +30,12 @@ public class EthServiceImpl implements EthService {
 	@Autowired
 	private Web3j web3j;
 
+	@Resource
+	private Geth geth;
+
 	
 	@Override
 	public Result createWallet(String wPwd, String sign)  {
-
-
 
 		//判断签名是否正确
 		Map<String, Object> param = new TreeMap<>();
@@ -54,6 +57,8 @@ public class EthServiceImpl implements EthService {
 		result.put("words", wallet.getMnemonic());
 		return Result.success(result);
 	}
+
+
 
 	@Override
 	public Result loadWallet(String wWord, String wPwd, String sign)  {

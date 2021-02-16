@@ -2,8 +2,10 @@ package com.bootx.eth.service.impl;
 
 import com.bootx.entity.Member;
 import com.bootx.eth.service.EthAdminService;
+import net.sf.ehcache.CacheManager;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
@@ -15,12 +17,19 @@ import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.geth.Geth;
 import org.web3j.utils.Convert;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 @Service
 public class EthAdminServiceImpl implements EthAdminService {
+
+    /**
+     * CacheManager
+     */
+    private static final CacheManager CACHE_MANAGER = CacheManager.create();
 
     @Autowired
     private Admin admin;
@@ -30,6 +39,9 @@ public class EthAdminServiceImpl implements EthAdminService {
 
     @Autowired
     private Web3j web3j;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
 
     @Override
@@ -57,9 +69,7 @@ public class EthAdminServiceImpl implements EthAdminService {
     @Override
     public String ethGetBalance(String address) {
         try{
-            System.out.println("ethGetBalance:"+address);
             EthGetBalance ethGetBalance = admin.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
-            System.out.println(address);
             BigDecimal bigDecimal = new BigDecimal(ethGetBalance.getBalance());
             return Convert.fromWei(bigDecimal, Convert.Unit.ETHER).toString();
         }catch (Exception e){
@@ -76,32 +86,24 @@ public class EthAdminServiceImpl implements EthAdminService {
      * @return
      */
     @Override
-    @Async
     public String transferEther(Member from, Member to, BigDecimal amount) {
-        System.out.println("============================================================================================");
         BigInteger value = Convert.toWei(amount, Convert.Unit.ETHER).toBigInteger();
-        System.out.println(from.getAccountId()+":"+to.getAccountId()+":"+value);
         try{
             geth.personalUnlockAccount(from.getAccountId(),from.getMobile()).send();
             EthGasPrice send = geth.ethGasPrice().send();
             BigInteger gasPrice = send.getGasPrice();
-            EthGetTransactionCount transactionCount = web3j.ethGetTransactionCount(from.getAccountId(), DefaultBlockParameterName.LATEST).send();
-            BigInteger nonce;
-            try{
-                nonce = transactionCount.getTransactionCount();
-            }catch (Exception e){
-                e.printStackTrace();
-                nonce = new BigInteger("0x0");
-            }
-            Transaction transaction = Transaction.createEtherTransaction(from.getAccountId(),nonce,gasPrice,gasPrice,to.getAccountId(),value);
+            BigInteger gasLimit = gasLimit();
+            BigInteger nonce = getNonce(from.getAccountId());
+            Transaction transaction = Transaction.createEtherTransaction(from.getAccountId(),nonce,gasPrice,gasLimit,to.getAccountId(),value);
             EthSendTransaction ethSendTransaction = admin.personalSendTransaction(transaction, from.getMobile()).send();
-            System.out.println(from.getAccountId()+":"+to.getAccountId()+":"+ethSendTransaction.getTransactionHash());
-            return ethSendTransaction.getTransactionHash();
+            System.out.println("nonce:"+nonce+"==="+ethSendTransaction.getTransactionHash());
+            setNonce(from.getAccountId(),nonce.add(BigInteger.ONE));
+            String transactionHash = ethSendTransaction.getTransactionHash();
+            return transactionHash;
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println(from.getAccountId()+":"+to.getAccountId()+":error");
+            return null;
         }
-        return "0.00";
     }
 
     protected EthTransaction getTransactionState(String hashString) {
@@ -109,9 +111,7 @@ public class EthAdminServiceImpl implements EthAdminService {
             EthGetTransactionReceipt send = web3j.ethGetTransactionReceipt(hashString).send();
             EthTransaction ethTransaction = web3j.ethGetTransactionByHash(hashString).send();
             String jsonString = ethTransaction.getJsonrpc();
-            System.out.println("json: " + jsonString);
             String valueString = Convert.fromWei(String.valueOf(Long.parseLong(ethTransaction.getResult().getValueRaw().replace("0x", ""), 16)), Convert.Unit.ETHER).toString();
-            System.out.println("valueString : " + valueString);
             return ethTransaction ;
         }catch (Exception e){
             e.printStackTrace();
@@ -125,13 +125,37 @@ public class EthAdminServiceImpl implements EthAdminService {
            EthTransaction ethTransaction = admin.ethGetTransactionByHash(tradeHash).send();
 
            org.web3j.protocol.core.methods.response.Transaction transactionResult = ethTransaction.getResult();
-
-           System.out.println(transactionResult.getValue());
            return transactionResult.getValue();
        }catch (Exception e){
            e.printStackTrace();
        }
        return null;
+    }
+
+    @Override
+    public BigInteger gasLimit() throws IOException {
+        EthBlock send = geth.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, false).send();
+        return send.getBlock().getGasLimit();
+    }
+
+    @Override
+    public BigInteger getNonce(String address) throws IOException {
+        String nonce = stringRedisTemplate.opsForValue().get(address + ":nonce");
+        EthGetTransactionCount transactionCount = geth.ethGetTransactionCount(address, DefaultBlockParameterName.LATEST).send();
+        if(StringUtils.isBlank(nonce)){
+            try{
+                BigInteger nonce1 = transactionCount.getTransactionCount();
+                stringRedisTemplate.opsForValue().set(address + ":nonce",nonce1+"");
+            }catch (Exception e){
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+        return new BigInteger(Objects.requireNonNull(stringRedisTemplate.opsForValue().get(address + ":nonce")));
+    }
+
+    private BigInteger setNonce(String address,BigInteger nonce){
+        stringRedisTemplate.opsForValue().set(address + ":nonce",nonce+"");
+        return nonce;
     }
 
 }

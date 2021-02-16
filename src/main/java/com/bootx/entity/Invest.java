@@ -90,6 +90,21 @@ public class Invest extends BaseEntity<Long>{
 
     private Integer type;
 
+    /**
+     * 等于0 说明该收益是需要通过转账形式的
+     */
+    private Integer type1;
+
+    /**
+     * type1等于0 说明该收益是需要通过转账形式的.
+     * 如果是status=0：是需要转的
+     * status=1： 转成功
+     * status=2： 转失败了
+     */
+    private Integer status;
+
+    private String transactionHash;
+
     @Column(precision = 27, scale = 12)
     private BigDecimal profit;
 
@@ -345,6 +360,30 @@ public class Invest extends BaseEntity<Long>{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getType1() {
+        return type1;
+    }
+
+    public void setType1(Integer type1) {
+        this.type1 = type1;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getTransactionHash() {
+        return transactionHash;
+    }
+
+    public void setTransactionHash(String transactionHash) {
+        this.transactionHash = transactionHash;
     }
 
     public BigDecimal getProfit() {

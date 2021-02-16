@@ -7,6 +7,7 @@ import org.web3j.protocol.core.methods.response.EthAccounts;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public interface EthAdminService {
 
@@ -19,4 +20,9 @@ public interface EthAdminService {
     String ethGetBalance(String address);
 
     String transferEther(Member from, Member to, BigDecimal amount);
+
+
+    BigInteger gasLimit() throws IOException;
+
+    BigInteger getNonce(String address) throws IOException;
 }
